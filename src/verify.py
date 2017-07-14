@@ -21,6 +21,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 import os
 import subprocess
+import sys; sys.dont_write_bytecode = True
 
 class Dockerbench:
 	def __init__(self):

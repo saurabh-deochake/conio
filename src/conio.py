@@ -19,7 +19,6 @@ Author: Saurabh Deochake, Intel Corporation
 import verify as verify
 
 
-
 def main():
 		d = verify.Dockerbench()
 
