@@ -31,7 +31,7 @@ setup(
 	install_requires=['Click'],
 	entry_points='''
 		[console_scripts]
-		conio=src.conio:main
+		conio=src.conio:conio
 	'''
 
 

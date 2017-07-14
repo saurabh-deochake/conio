@@ -25,17 +25,20 @@ import sys; sys.dont_write_bytecode = True
 
 class Dockerbench:
 	def __init__(self):
-		# Welcome
-		print "\nConio- A lightweight script for containerized I/O benchmarking of NVMe SSDs"
-		print "Intel Corporation. 2017."
 		# check environment variable
+		pass
+
+	def verifyEnvironment(self):
 		if self.verifyDocker():
 				if self.verifyDockerdRunning():
-						if self.verifyFioContainer():
-							self.setupBenchmarkContainer()
+						res = self.verifyFioContainer() 
+						if not int(res):
+							return 0
+							#self.setupBenchmarkContainer(num)
 						else:
 							print "\t-[INFO] Docker container for benchmarking already set up\n\n"
-						#exit(1)
+							return int(res)
+							#exit(1)
 
 ## --------------------------------------------------------------------------
 
@@ -74,7 +77,7 @@ class Dockerbench:
 	def verifyFioContainer(self):
 		try:
 			#print "\t...Verifying if benchmark container is set up"
-			res = subprocess.check_output("docker ps | grep docker_fio", shell=True)
+			res = subprocess.check_output("docker ps | grep docker_fio | wc -l", shell=True)
 			
 			## DO SOMETHING WITH THIS RES
 			"""print res
@@ -86,7 +89,7 @@ class Dockerbench:
 						return false
 					elif inp == "y" or inp == "Y":
 						return setupBenchmarkContainer()"""
-			return
+			return res
 		except Exception, e:
 				 print "\t-[ERROR] Benchmark container is not running"
 				 inp = raw_input("\t-Set up the container automatically? [y/N]: ")
@@ -95,7 +98,7 @@ class Dockerbench:
 				 else:
 						 print "\t-[ERROR] Cannot run without a container."
 						 print "\t-To create a container manually, run as root:"
-						 print "\t-\"docker run --name=docker_fio --cap-add=SYS_ADMIN -d --device=/dev/nvme0n1:/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null\""
+						 print "\t-\"docker run --cap-add=SYS_ADMIN -d --device=/dev/nvme0n1:/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null\""
 						# print "\t...Exiting! Bye!"
 						 exit(1) 
 				
@@ -103,18 +106,23 @@ class Dockerbench:
 ## -------------------------------------------------------------------------
 	
 	# Set up a container from image and run as daemon
-	def setupBenchmarkContainer(self):
+	def setupBenchmarkContainer(self, num):
 		try:
-			print "\nSetting up a container for benchmarking"
+			print "\nSetting up %s container(s) for benchmarking..."%num
 			while(1):
 				location = raw_input("\t-Where is your NVMe disk located?: ")
 				if os.path.exists(location):
-					cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null"	
-					res = subprocess.check_output(cmd, shell=True)
-					print "\t-Benchmark container is set up"
-					print "\t-[INFO] New Container ID:"+res
-					if res != "":
-						return True
+					containerIds = []
+					for i in range(num):
+						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null"	
+						res = subprocess.check_output(cmd, shell=True)
+						containerIds.append(res)
+						print "\t-Benchmark container #%s is set up"%(i+1)
+						print "\t-[INFO] New Container ID:"+res
+						#if res == "":
+						#	break
+					
+					return containerIds
 				else:
 					print "\t-[ERROR] No such file or directory"
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
@@ -124,7 +132,6 @@ class Dockerbench:
 					else:
 							continue
 
-			#return True
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
