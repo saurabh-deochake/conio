@@ -38,10 +38,14 @@ def conio(tools,num):
 	elif num>res:
 		d.setupBenchmarkContainer(num-res)
 	else:
-		print d.getContainerID(num)
+		print "\t-Already have enough containers running, fetching first %s containers"%num
+	
+	ids = d.getContainerID(num)
 
 	if tools.lower() == "fio".lower():
-		print 'We will run %s'%fio
+		for id in ids: 
+			d.runFio(id, "--help")
+
 	elif tools.lower() == "nvme_cli".lower():
 		print "WE will run %s"%nvme_cli
 	else:

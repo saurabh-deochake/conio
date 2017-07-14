@@ -36,10 +36,11 @@ class Dockerbench:
 				if self.verifyDockerdRunning():
 						res = self.verifyFioContainer() 
 						if not int(res):
+							print "\t-[OK] Docker is installed and running"
 							return 0
 							#self.setupBenchmarkContainer(num)
 						else:
-							print "\t-[INFO] Docker container for benchmarking already set up\n\n"
+							print "\t-[INFO] Docker container for benchmarking already set up"
 							return int(res)
 							#exit(1)
 
@@ -131,7 +132,7 @@ class Dockerbench:
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
 					if op =="N" or op=="n":
 							print "\t-Exiting! Bye!"
-							break
+							exit(1)
 					else:
 							continue
 
@@ -154,7 +155,12 @@ class Dockerbench:
 			return containerIDs
 ## -----------------------------------------------------------------------
 
+	# Run FIO inside a container
 
+	def runFio(self, containerID, params):
+			cmd = "docker exec "+containerID+" fio "+params
+			res = subprocess.check_output(cmd, shell=True)
+			print res
 
 
 
