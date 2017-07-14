@@ -128,8 +128,21 @@ class Dockerbench:
 			print str(e)
 ## -------------------------------------------------------------------------
 
-if __name__ == '__main__':
-	d = Dockerbench()
+	#Run FIO
+	def runFio(self):
+		try:
+				pass
+		except Exception, e:
+				pass
+## -----------------------------------------------------------------------
 
+# entry point
+def main():
+		d = Dockerbench()
+
+if __name__ == '__main__':
+	
+	main()
+	
 
 		
