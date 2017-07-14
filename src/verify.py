@@ -26,7 +26,7 @@ import sys; sys.dont_write_bytecode = True
 class Dockerbench:
 	def __init__(self):
 		# Welcome
-		print "\nDockbench- A lightweight script to benchmark NVMe SSD inside containers"
+		print "\nConio- A lightweight script for containerized I/O benchmarking of NVMe SSDs"
 		print "Intel Corporation. 2017."
 		# check environment variable
 		if self.verifyDocker():

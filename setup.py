@@ -21,7 +21,7 @@ Author: Saurabh Deochake, Intel Corporation
 from setuptools import setup
 
 setup(
-	name='dockbench',
+	name='Conio',
 	version='1.0',
 	description='A lightweight utility for containerized benchmarking of  NVMe SSD using FIO and NVMe-Cli',
 	author='Saurabh Deochake',
@@ -31,7 +31,7 @@ setup(
 	install_requires=['Click'],
 	entry_points='''
 		[console_scripts]
-		dio:dockerbench.src.dockerbench:main
+		conio=src.conio:main
 	'''
 
 
