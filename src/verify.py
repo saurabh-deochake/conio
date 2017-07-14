@@ -2,8 +2,6 @@
 
 #!/bin/python
 
-import subprocess
-import os
 
 """
 http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -20,6 +18,9 @@ limitations under the License.
 
 Author: Saurabh Deochake, Intel Corporation
 """
+
+import os
+import subprocess
 
 class Dockerbench:
 	def __init__(self):
@@ -136,13 +137,3 @@ class Dockerbench:
 				pass
 ## -----------------------------------------------------------------------
 
-# entry point
-def main():
-		d = Dockerbench()
-
-if __name__ == '__main__':
-	
-	main()
-	
-
-		
