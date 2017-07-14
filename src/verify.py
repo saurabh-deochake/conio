@@ -28,6 +28,9 @@ class Dockerbench:
 		# check environment variable
 		pass
 
+## -------------------------------------------------------------------------
+	
+	# Verify environment needed to run the tool
 	def verifyEnvironment(self):
 		if self.verifyDocker():
 				if self.verifyDockerdRunning():
@@ -137,11 +140,32 @@ class Dockerbench:
 			print str(e)
 ## -------------------------------------------------------------------------
 
-	#Run FIO
-	def runFio(self):
-		try:
-				pass
-		except Exception, e:
-				pass
+	# Get me Container IDs 
+	# This is run only if we already have sufficient number of containers
+	# running to run the tool
+	def getContainerID(self, num):
+			containerIDs = []
+			res = subprocess.check_output("docker ps | grep docker_fio", shell=True)
+			for cont in res.split("\n"):
+					id = cont.split(" ")[0]
+					if id:
+						containerIDs.append(cont.split(" ")[0])
+					#containers[cont.split(" ")[0]] = cont.split(" ")[5]
+			return containerIDs
 ## -----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

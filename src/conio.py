@@ -38,7 +38,7 @@ def conio(tools,num):
 	elif num>res:
 		d.setupBenchmarkContainer(num-res)
 	else:
-		pass
+		print d.getContainerID(num)
 
 	if tools.lower() == "fio".lower():
 		print 'We will run %s'%fio
