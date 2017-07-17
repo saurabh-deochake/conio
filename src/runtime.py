@@ -45,12 +45,13 @@ class Runtime:
 		# run Fio based on parameters and number of containers
 		def runFio(self, containerIDs, params):
 			try:
+				print "\n"
 				with click.progressbar(containerIDs) as bar:
 					for id in bar:
-						print "\n Running Fio inside container:%s"%id
+						print "\nRunning Fio inside container:%s"%id
 						cmd = "docker exec "+id+" fio "+params
 						res = subprocess.check_output(cmd, shell=True)
-						print res
+						print res.split("\n")[6].split(",")[2]
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"

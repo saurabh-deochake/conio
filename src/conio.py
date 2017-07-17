@@ -71,18 +71,16 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	d = verify.Verify()
 	res = d.verifyEnvironment()
 
+	rt = Runtime()
 	# if not then set up all containers that are required ("num")
 	if not res:
 		d.setupBenchmarkContainer(num)
 	elif num>res:
 		d.setupBenchmarkContainer(num-res)
 	else:
+		ids = rt.getContainerID(num)
 		print "\t-Already have enough containers running, fetching first %s containers"%num
-	
-	rt = Runtime()
-	# get IDs of all containers that have been created
-	ids = rt.getContainerID(num)
-
+		ids = ids[:num]
 
 	# which tool do you want to run?
 	if tools.lower() == "fio".lower():
