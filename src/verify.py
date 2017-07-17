@@ -23,7 +23,7 @@ import os
 import subprocess
 import sys; sys.dont_write_bytecode = True
 
-class Dockerbench:
+class Verify:
 	def __init__(self):
 		# check environment variable
 		pass
@@ -140,7 +140,7 @@ class Dockerbench:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
 ## -------------------------------------------------------------------------
-
+"""
 	# Get me Container IDs 
 	# This is run only if we already have sufficient number of containers
 	# running to run the tool
@@ -165,7 +165,7 @@ class Dockerbench:
 
 
 
-
+"""
 
 
 
