@@ -118,7 +118,7 @@ class Dockerbench:
 				if os.path.exists(location):
 					containerIds = []
 					for i in range(num):
-						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null"	
+						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/nvme0n1:rw saurabhd04/docker_fio tail -f /dev/null"	
 						res = subprocess.check_output(cmd, shell=True)
 						containerIds.append(res)
 						print "\t-Benchmark container #%s is set up"%(i+1)
