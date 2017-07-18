@@ -46,34 +46,32 @@ class Runtime:
 		def runTool(self,tool, containerIDs, fioParams, nvmeParams):
 			try:
 				out = []
-				for id in containerIDs:
-					#if tool is fio tool=1
-					if tool == 1:
-						print "Running Fio inside container:%s"%id
+				print "\nGo grab some coffee while I finish benchmarking your containers!"
+				#if tool is fio tool=1
+				if tool == 1:
+					print "Now running Fio inside containers..."
+					for id in containerIDs:
+						print "\t-Inside container:%s"%id
 						cmd = "docker exec "+id+" fio "+fioParams
 						res = subprocess.check_output(cmd, shell=True)
-						#print "\nSummary for container:%s"%id
-					#	print res+"\n\n"
 						out.append(self.process(id, tool, res))
-					#	self.summarize(out)
 							
-					# if tool is nvme tool=2
-					elif tool == 2:
-						print "Running NVMe-CLI inside container:%s"%id
+				# if tool is nvme tool=2
+				elif tool == 2:
+					print "Now running NVMe-CLI inside containers..."
+					for id in containerIDs:
+						print "\t-Inside container:%s"%id
 						cmd = "docker exec "+id+" nvme "+nvmeParams
 						res = subprocess.check_output(cmd, shell=True)
-						#print "\nSummary for container:%s"%id
 						out.append(self.process(id, tool, res))
-					#	self.summarize(out)
-					else:
-						## Run both here parallel
-						print "Running Fio and NVMe-CLI inside container:%s"%id
+				else:
+					## Run both here parallel
+					print "Now running Fio and NVMe-CLI inside containers..."
+					for id in containerIDs:
+						print "\t-Inside container:%s"%id
 						cmd = "docker exec "+id+" fio "+fioParams+\
 									  " & nvme "+nvmeParams
 						res = subprocess.check_output(cmd, shell=True)
-						#print res+"\n\n"
-								
-						#print "\nSummary for container:%s"%id
 						out.append(self.process(id, tool, res))
 								
 				self.summarize(out)

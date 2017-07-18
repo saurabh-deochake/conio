@@ -115,7 +115,7 @@ class Verify:
 			print "\nSetting up %s container(s) for benchmarking..."%num
 			while(1):
 				location = raw_input("\t-Where is your NVMe disk located?: ")
-				if os.path.exists(location):
+				if os.path.exists(location) and ("/dev/nvme".lower() in location):
 					containerIds = []
 					for i in range(num):
 						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/nvme0n1:rw saurabhd04/docker_fio tail -f /dev/null"	
@@ -140,34 +140,17 @@ class Verify:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
 ## -------------------------------------------------------------------------
-"""
-	# Get me Container IDs 
-	# This is run only if we already have sufficient number of containers
-	# running to run the tool
-	def getContainerID(self, num):
-			containerIDs = []
-			res = subprocess.check_output("docker ps | grep docker_fio", shell=True)
-			for cont in res.split("\n"):
-					id = cont.split(" ")[0]
-					if id:
-						containerIDs.append(cont.split(" ")[0])
-					#containers[cont.split(" ")[0]] = cont.split(" ")[5]
-			return containerIDs
-## -----------------------------------------------------------------------
-
-	# Run FIO inside a container
-
-	def runFio(self, containerID, params):
-			cmd = "docker exec "+containerID+" fio "+params
-			res = subprocess.check_output(cmd, shell=True)
-			print res
-
-
-
-
-"""
-
-
+	
+	# Clean up by removing containers
+	def cleanup(self, id):
+		try:
+			for id in id:
+				print "\nRemoving container:%s"%id
+				cmd = "docker stop "+id+" && docker rm "+id
+				res = subprocess.check_output(cmd, shell=True)
+		except:
+			print "\n[ERROR] Something went wrong. Try again!"
+			print str(e)
 
 
 

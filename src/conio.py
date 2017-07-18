@@ -74,7 +74,7 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	rt = Runtime()
 	# if not then set up all containers that are required ("num")
 	if not res:
-		d.setupBenchmarkContainer(num)
+		d`.setupBenchmarkContainer(num)
 		ids = rt.getContainerID(num)
 	elif num>res:
 		d.setupBenchmarkContainer(num-res)
@@ -114,8 +114,7 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 		rt.runTool(tool, ids, fioParams, nvmeParams)
 
 
-
-	
+	d.cleanup(ids)
 
 if __name__ == '__main__':
 	conio()
