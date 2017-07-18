@@ -84,22 +84,34 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 
 	# which tool do you want to run?
 	if tools.lower() == "fio".lower():
-		params = "--filename="+filename+" --name="+name+" --thread="+thread + \
+		tool = 1
+		nvmeParams = None
+		fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 				" --direct="+direct+" --group_reporting="+group_reporting+ \
 				" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 				" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 				" --runtime="+runtime+" --numjobs="+numjobs
-		rt.runFio(ids, params)
+		rt.runTool(tool,ids, fioParams,nvmeParams)
 
 	elif tools.lower() == "nvme".lower():
-		print "WE will run %s"%nvme_cli
+		tool = 2
+		fioParams = None
+		nvmeParams = "smart-log /dev/nvme0n1"
+		rt.runTool(tool, ids,fioParams,nvmeParams)
 	else:
 		tools = "all"
-		print "we will run both ",tools
-		# Multi-threaded part goes here
+		tool = 3
+		fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+						" --direct="+direct+" --group_reporting="+group_reporting+ \
+						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
+						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
+						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
+						" --runtime="+runtime+" --numjobs="+numjobs
+		nvmeParams = "smart-log /dev/nvme0n1"
+		rt.runTool(tool, ids, fioParams, nvmeParams)
 
-	# 
+
 
 	
 
