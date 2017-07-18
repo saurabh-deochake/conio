@@ -55,6 +55,7 @@ class Runtime:
 								cmd = "docker exec "+id+" fio "+fioParams
 								res = subprocess.check_output(cmd, shell=True)
 								print "\nSummary for container:%s"%id
+								print res+"\n\n"
 								self.summarize(tool, res)
 							
 							# if tool is nvme tool=2
@@ -70,6 +71,8 @@ class Runtime:
 								cmd = "docker exec "+id+" fio "+fioParams+\
 									  " & nvme "+nvmeParams
 								res = subprocess.check_output(cmd, shell=True)
+								print res+"\n\n"
+								
 								print "\nSummary for container:%s"%id
 								self.summarize(tool, res)
 
@@ -84,34 +87,36 @@ class Runtime:
 			try:
 				if tool == 1:
 					lines = res.split("\n")
+					op = res.split("Starting")[1].split("\n")
 					print "\nFIO I/O benchmark:"
-					print "> Operation: "+lines[0].split(",")[0].split(":")[2].split("=")[1]
-					print "> Jobs: "+lines[3].split(" ")[1]
-					print "> Blocksize: "+lines[0].split(",")[1].split("=")[1].split("-")[0]
-					print "> Iodepth: "+lines[0].split(",")[3].split("=")[1]
-					print "> IOPS: "+lines[6].split(",")[2].split("=")[1]
-					print "> Bandwidth: "+lines[6].split(",")[1].split("=")[1]
-					print "> Avg. Latency: "+lines[8].split(",")[2].split("=")[1]+" usec"
-					print "> 99.99 Latency: "+lines[15].split(" ")[-1][:-1]+" usec"
+					print "> Operation:"+lines[0].split(",")[0].split(":")[2].split("=")[1]
+					print "> Jobs:"+op[2].split(" ")[2].split("=")[1].split(")")[0]
+					print "> Blocksize:"+lines[0].split(",")[1].split("=")[1].split("-")[0]
+					print "> Iodepth:"+lines[0].split(",")[3].split("=")[1]
+					print "> IOPS:"+op[3].split(",")[2].split("=")[1]
+					print "> Bandwidth:"+op[3].split(",")[1].split("=")[1]
+					print "> Avg. Latency:"+op[5].split(",")[2].split("=")[1]+" usec"
+					print "> 99.99 Latency:"+op[12].split(" ")[-1][:-1]+" usec"
 				if tool == 2:
 					lines = res.split("\n")
 					print "\nNVMe-CLI:"
-					print "> Temperature: "+lines[2].split(":")[1]
-					print "> Available Spare: "+lines[3].split(":")[1]
-					print "> Percent Used: "+lines[5].split(":")[1]
-					print "> Data Units Read: "+lines[6].split(":")[1]
-					print "> Data Units Written: "+lines[7].split(":")[1]
+					print "> Temperature:"+lines[2].split(":")[1]
+					print "> Available Spare:"+lines[3].split(":")[1]
+					print "> Percent Used:"+lines[5].split(":")[1]
+					print "> Data Units Read:"+lines[6].split(":")[1]
+					print "> Data Units Written:"+lines[7].split(":")[1]
 				if tool == 3:
 					lines = res.split("\n")
+					op = res.split("Starting")[1].split("\n")
 					print "\nFIO I/O benchmark:"
-					print "> Operation: "+lines[18].split(",")[0].split(":")[2].split("=")[1]
-					print "> Jobs: "+lines[21].split(" ")[1]
-					print "> Blocksize: "+lines[18].split(",")[1].split("=")[1].split("-")[0]
-					print "> Iodepth: "+lines[18].split(",")[3].split("=")[1]
-					print "> IOPS: "+lines[24].split(",")[2].split("=")[1]
-					print "> Bandwidth: "+lines[24].split(",")[1].split("=")[1]
-					print "> Avg. Latency: "+lines[26].split(",")[2].split("=")[1]+" usec"
-					print "> 99.99 Latency: "+lines[33].split(" ")[-1][:-1]+" usec"
+					print "> Operation:"+lines[18].split(",")[0].split(":")[2].split("=")[1]
+					print "> Jobs:"+op[2].split(" ")[2].split("=")[1].split(")")[0]
+					print "> Blocksize:"+lines[18].split(",")[1].split("=")[1].split("-")[0]
+					print "> Iodepth:"+lines[18].split(",")[3].split("=")[1]
+					print "> IOPS:"+op[3].split(",")[2].split("=")[1]
+					print "> Bandwidth:"+op[3].split(",")[1].split("=")[1]
+					print "> Avg. Latency:"+op[5].split(",")[2].split("=")[1]+" usec"
+					print "> 99.99 Latency:"+op[12].split(" ")[-1][:-1]+" usec"
 
 					# NVME
 					print "\nNVMe-CLI:"
