@@ -43,15 +43,30 @@ class Runtime:
 ## -------------------------------------------------------------------------
 
 		# run Fio based on parameters and number of containers
-		def runFio(self, containerIDs, params):
+		def runFio(self,tool containerIDs, params):
 			try:
 				print "\n"
 				with click.progressbar(containerIDs) as bar:
 					for id in bar:
-						print "\nRunning Fio inside container:%s"%id
-						cmd = "docker exec "+id+" fio "+params
-						res = subprocess.check_output(cmd, shell=True)
-						print res.split("\n")[6].split(",")[2]
+
+							#if tool is fio tool=1
+							if tool == 1:
+								print "\nRunning Fio inside container:%s"%id
+								cmd = "docker exec "+id+" fio "+params
+								res = subprocess.check_output(cmd, shell=True)
+								
+								## --- Print properly ---
+								print res.split("\n")[6].split(",")[2]
+							
+							# if tool is nvme tool=2
+							elif tool == 2:
+								print "\nRunning NVMe-CLI inside container:%s"%id
+								cmd = "docker exec "+id" nvme "+params
+								res = subprocess.check_output(cmd, shell=True)
+								print res
+							else:
+								## Run both here parallel
+								pass
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
