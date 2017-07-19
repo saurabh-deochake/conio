@@ -16,6 +16,7 @@ specific language governing permissions and limitations under the License.
 Author: Saurabh Deochake, Intel Corporation
 """
 
+## Handle command line parameters to the tools
 
 import verify as verify
 import click 
