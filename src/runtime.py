@@ -48,7 +48,7 @@ class Runtime:
 		def runTool(self,tool, containerIDs, fioParams, nvmeParams):
 			try:
 				out = []
-				print "Go grab some coffee while I finish benchmarking your containers!\n"
+				print "\nGo grab some coffee while I finish benchmarking your containers!\n"
 				#if tool is fio tool=1
 				if tool == 1:
 					print "Now running Fio inside containers..."

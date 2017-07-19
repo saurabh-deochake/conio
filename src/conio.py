@@ -19,12 +19,13 @@ Author: Saurabh Deochake, Intel Corporation
 
 import verify as verify
 import click 
+import os
 
 from runtime import Runtime
 
 # all the options
 @click.command()
-@click.option('--tools',default='all',type=click.Choice(['fio','nvme','all']),
+@click.option('--tool',default='all',type=click.Choice(['fio','nvme','all']),
 				help='I/O benchmark tools to run: fio/nvme/all (both: default)')
 @click.option('--num', default=1,
 				help='Number of containers to spawn for benchmarking')
@@ -57,14 +58,14 @@ from runtime import Runtime
 @click.option('--filename',default='/dev/nvme0n1',
 				help='Path to your disk to run benchmark')
 @click.option('--name',default='testrun',help='Name for your job')
-
+@click.option('--jobfile', help="Path to your fio job file")
 
 ## ------------------------------------------------------------------------
 
 # command function, handles all parameters
-def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
+def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
-				numjobs,filename,name):
+				numjobs,filename,name,jobfile):
 	"""Conio- A lightweight script for containerized I/O benchmarking of NVMe SSDs
 	"""
 	print "\nConio- A lightweight script for containerized I/O benchmarking of NVMe SSDs"
@@ -86,38 +87,50 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 		ids = rt.getContainerID(num)
 		print "\t-Already have enough containers running, fetching first %s containers"%num
 	ids = ids[:num]
-
+	
 	# which tool do you want to run?
-	if tools.lower() == "fio".lower():
+	if tool.lower() == "fio".lower():
 		tool = 1
 		nvmeParams = None
-		fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+		if jobfile:
+			if os.path.exists(jobfile):
+				path = os.path.abspath(jobfile)
+				d.copyToDocker(ids,path)
+				fioParams= "/"+os.path.basename(jobfile)
+			else:
+				fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 				" --direct="+direct+" --group_reporting="+group_reporting+ \
 				" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 				" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 				" --runtime="+runtime+" --numjobs="+numjobs
-		# run the tool inside containers
-		rt.runTool(tool,ids, fioParams,nvmeParams)
+			# run the tool inside containers
+			rt.runTool(tool,ids, fioParams,nvmeParams)
 
 	# nvme-cli
-	elif tools.lower() == "nvme".lower():
+	elif tool.lower() == "nvme".lower():
 		tool = 2
 		fioParams = None
 		nvmeParams = "smart-log /dev/nvme0n1"
 		rt.runTool(tool, ids,fioParams,nvmeParams)
 	# fio and nvme-cli
 	else:
-		tools = "all"
+		tool = "all"
 		tool = 3
-		fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+		if jobfile:
+			if os.path.exists(jobfile):
+				path = os.path.abspath(jobfile)
+				d.copyToDocker(ids, path)
+				fioParams = "/"+os.path.basename(jobfile)
+			else:
+				fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
-		nvmeParams = "smart-log /dev/nvme0n1"
-		rt.runTool(tool, ids, fioParams, nvmeParams)
+			nvmeParams = "smart-log /dev/nvme0n1"
+			rt.runTool(tool, ids, fioParams, nvmeParams)
 
 	# stop and remove containers
 	d.cleanup(ids)

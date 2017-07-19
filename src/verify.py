@@ -152,7 +152,17 @@ class Verify:
 
 
 
+## -------------------------------------------------------------------------
 
-
+	# if jobfile is mentioned, copy that to docker containers
+	def copyToDocker(self, ids, jobfile):
+		try:
+				for id in ids:
+					#print "Copying jobfile to containers..."
+					cmd = "docker cp "+jobfile+" "+id+":/"
+					res = subprocess.check_output(cmd, shell=True)
+		except Exception, e:
+				print "\n[ERROR] Something went wrong. Try again!"
+				print str(e)
 
 
