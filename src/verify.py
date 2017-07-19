@@ -140,14 +140,12 @@ class Verify:
 				if inp == "y" or inp == "Y":
 					for id in id:
 						#remove containers by docker stop and docker rm
-						print "\nRemoving container:%s"%id
+						print "\t-[INFO] Removing container:%s"%id
 						cmd = "docker stop "+id+" && docker rm "+id
 						res = subprocess.check_output(cmd, shell=True)
 					return
-				elif inp == 'n' or inp == "N":
-					return
 				else:
-						continue
+					return
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
