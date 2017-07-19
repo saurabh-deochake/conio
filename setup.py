@@ -27,14 +27,11 @@ setup(
 	author='Saurabh Deochake',
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',
-	py_modules=['dockerbench'],
+	py_modules=['conio'],
 	install_requires=['Click'],
 	entry_points='''
 		[console_scripts]
 		conio=src.conio:conio
 	'''
-
-
-
 
 )
