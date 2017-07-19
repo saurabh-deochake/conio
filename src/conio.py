@@ -123,6 +123,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				d.copyToDocker(ids, path)
 				fioParams = "/"+os.path.basename(jobfile)
 			else:
+				# gather all parameters, if not mentioned then take default
 				fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
