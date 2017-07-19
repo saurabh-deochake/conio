@@ -82,17 +82,7 @@ class Verify:
 		try:
 			#print "\t...Verifying if benchmark container is set up"
 			res = subprocess.check_output("docker ps | grep docker_fio | wc -l", shell=True)
-			
-			## DO SOMETHING WITH THIS RES
-			"""print res
-			if res.stdout == "":
-					print "Benchmark container is not running..."
-					inp = raw_input("Do you want to set up the container \
-									automatically? y/N")
-					if inp == "N" or inp == "n":
-						return false
-					elif inp == "y" or inp == "Y":
-						return setupBenchmarkContainer()"""
+			# return the output 	
 			return res
 		except Exception, e:
 				 print "\t-[ERROR] Benchmark container is not running"
@@ -114,10 +104,12 @@ class Verify:
 		try:
 			print "\nSetting up %s container(s) for benchmarking..."%num
 			while(1):
+				# Takes only valid disk file
 				location = raw_input("\t-Where is your NVMe disk located?: ")
-				if os.path.exists(location) and ("/dev/nvme".lower() in location):
+				if os.path.exists(location):
 					containerIds = []
 					for i in range(num):
+						# spawn containers and mount nvme disk as volume
 						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/nvme0n1:rw saurabhd04/docker_fio tail -f /dev/null"	
 						res = subprocess.check_output(cmd, shell=True)
 						containerIds.append(res)
@@ -125,10 +117,9 @@ class Verify:
 						print "\t-[INFO] New Container ID:"+res
 						#if res == "":
 						#	break
-					
-					return containerIds
+					return containerIds 
 				else:
-					print "\t-[ERROR] No such file or directory"
+					print "\t-[ERROR] No such file or directory. NVMe-CLI won't work on HDD."
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
 					if op =="N" or op=="n":
 							print "\t-Exiting! Bye!"
@@ -144,11 +135,20 @@ class Verify:
 	# Clean up by removing containers
 	def cleanup(self, id):
 		try:
-			for id in id:
-				print "\nRemoving container:%s"%id
-				cmd = "docker stop "+id+" && docker rm "+id
-				res = subprocess.check_output(cmd, shell=True)
-		except:
+			while(1):
+				inp = raw_input("\nCleanup the environment? [y|N]:")
+				if inp == "y" or inp == "Y":
+					for id in id:
+						#remove containers by docker stop and docker rm
+						print "\nRemoving container:%s"%id
+						cmd = "docker stop "+id+" && docker rm "+id
+						res = subprocess.check_output(cmd, shell=True)
+					return
+				elif inp == 'n' or inp == "N":
+					return
+				else:
+						continue
+		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
 

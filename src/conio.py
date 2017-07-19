@@ -22,6 +22,7 @@ import click
 
 from runtime import Runtime
 
+# all the options
 @click.command()
 @click.option('--tools',default='all',type=click.Choice(['fio','nvme','all']),
 				help='I/O benchmark tools to run: fio/nvme/all (both: default)')
@@ -58,7 +59,9 @@ from runtime import Runtime
 @click.option('--name',default='testrun',help='Name for your job')
 
 
+## ------------------------------------------------------------------------
 
+# command function, handles all parameters
 def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
 				numjobs,filename,name):
@@ -74,7 +77,7 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	rt = Runtime()
 	# if not then set up all containers that are required ("num")
 	if not res:
-		d`.setupBenchmarkContainer(num)
+		d.setupBenchmarkContainer(num)
 		ids = rt.getContainerID(num)
 	elif num>res:
 		d.setupBenchmarkContainer(num-res)
@@ -94,13 +97,16 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 				" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 				" --runtime="+runtime+" --numjobs="+numjobs
+		# run the tool inside containers
 		rt.runTool(tool,ids, fioParams,nvmeParams)
 
+	# nvme-cli
 	elif tools.lower() == "nvme".lower():
 		tool = 2
 		fioParams = None
 		nvmeParams = "smart-log /dev/nvme0n1"
 		rt.runTool(tool, ids,fioParams,nvmeParams)
+	# fio and nvme-cli
 	else:
 		tools = "all"
 		tool = 3
@@ -113,7 +119,7 @@ def conio(tools,num,thread,direct,group_reporting,ioengine,size,do_verify,
 		nvmeParams = "smart-log /dev/nvme0n1"
 		rt.runTool(tool, ids, fioParams, nvmeParams)
 
-
+	# stop and remove containers
 	d.cleanup(ids)
 
 if __name__ == '__main__':

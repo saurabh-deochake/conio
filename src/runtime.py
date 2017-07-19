@@ -29,8 +29,10 @@ class Runtime:
 		def getContainerID(self, num):
 			try:
 				containerIDs = []
+				# check if docker container with specific image is running
 				res = subprocess.check_output("docker ps | grep docker_fio", \
 												shell=True)
+				#gather ids for all containers
 				for cont in res.split("\n"):
 						id = cont.split(" ")[0]
 						if id:
@@ -46,7 +48,7 @@ class Runtime:
 		def runTool(self,tool, containerIDs, fioParams, nvmeParams):
 			try:
 				out = []
-				print "\nGo grab some coffee while I finish benchmarking your containers!"
+				print "\n\nGo grab some coffee while I finish benchmarking your containers!"
 				#if tool is fio tool=1
 				if tool == 1:
 					print "Now running Fio inside containers..."
@@ -78,16 +80,19 @@ class Runtime:
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
-					print str(e)
+					print "Please note that NVMe-CLI does not work on HDDs"
 
 ## -------------------------------------------------------------------------
 
 		# Process the output and store it in dictionary
 		def process(self, id, tool, res):
 			try:
+				# store output for each container
+				# use list of dict of dict
 				output = {}
 				output[id] = {}
 				if tool == 1:
+					#only fio
 					lines = res.split("\n")
 					op = res.split("Starting")[1].split("\n")
 					output[id]['Operation'] = lines[0].split(",")[0].split(":")[2].split("=")[1]
@@ -99,6 +104,7 @@ class Runtime:
 					output[id]['Avg Latency'] = op[5].split(",")[2].split("=")[1]+" usec"
 					output[id]['99.99 Latency'] = op[12].split(" ")[-1][:-1]+" usec"
 				if tool == 2:
+					#only nvme
 					lines = res.split("\n")
 					output[id]['Temperature'] = lines[2].split(":")[1]
 					output[id]['Available Spare'] = lines[3].split(":")[1]
@@ -106,6 +112,7 @@ class Runtime:
 					output[id]['Data Units Read'] = lines[6].split(":")[1]
 					output[id]['Data Units Written'] = lines[7].split(":")[1]
 				if tool == 3:
+					#both fio and nvme
 					lines = res.split("\n")
 					op = res.split("Starting")[1].split("\n")
 					output[id]['Operation'] = lines[18].split(",")[0].split(":")[2].split("=")[1]
@@ -117,7 +124,7 @@ class Runtime:
 					output[id]['Avg Latency'] = op[5].split(",")[2].split("=")[1]+" usec"
 					output[id]['99.99 Latency'] = op[12].split(" ")[-1][:-1]+" usec"
 
-					#NVME
+					#NVME part
 					output[id]['Temperature'] = lines[2].split(":")[1]
 					output[id]['Available Spare'] = lines[3].split(":")[1]
 					output[id]['Percent Used'] = lines[5].split(":")[1]
@@ -133,6 +140,7 @@ class Runtime:
 		# print the output on screen
 		def summarize(self, output):
 			try:
+				# print the output for each container 
 				for output in output:
 					for key  in output:
 						print "\n---Summary for container:%s---"%key
