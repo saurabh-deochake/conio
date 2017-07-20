@@ -90,7 +90,7 @@ class Runtime:
 					print res
 					#out.append(self.process(containerIDs, tool, res))
 								
-				self.summarize(out)
+				self.summarize(tool, containerIDs)
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
@@ -152,7 +152,7 @@ class Runtime:
 ## -------------------------------------------------------------------------
 
 		# print the output on screen
-		def summarize(self, output):
+		def summarizeIt(self, output):
 			try:
 				# print the output for each container 
 				for output in output:
@@ -164,3 +164,36 @@ class Runtime:
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
 					print str(e)
+
+## ------------------------------------------------------------------------
+
+	# print the summary of operation
+		def summarize(self, tool, containerIDs):
+			try:
+				if tool == 1:
+					for id in containerIDs:
+						print "\nSummary for container:%s"%id
+						cmd = "docker exec "+id+" cat /fio.out"
+						res = subprocess.check_output(cmd, shell=True)
+						print res
+				if tool == 2:
+					for id in containerIDs:
+						print "\nSummary for container:%s"%id
+						cmd = "docker exec "+id+" cat /nvme.out"
+						res = subprocess.check_output(cmd, shell=True)
+						print res
+				else:
+					for id in containerIDs:
+						print "\nSummary for container:%s"%id
+						cmd = "docker exec "+id+" cat /fio.out"
+						res = subprocess.check_output(cmd, shell=True)
+						print "\n---------FIO------------"
+						print res
+						cmd = "docker exec "+id+" cat /nvme.out"
+						res = subprocess.check_output(cmd, shell=True)
+						print "\n--------NVME------------"
+						print res
+			except Exception, e:
+				print "\n[ERROR] Something went wrong. Try again!"
+				print str(e)
+
