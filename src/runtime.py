@@ -52,36 +52,50 @@ class Runtime:
 				#if tool is fio tool=1
 				if tool == 1:
 					print "Now running Fio inside containers..."
+					fio = " fio "+fioParams+" --output=fio.out &"
+					cmd = ""
 					for id in containerIDs:
 						print "\t-Inside container:%s"%id
-						cmd = "docker exec "+id+" fio "+fioParams
-						res = subprocess.check_output(cmd, shell=True)
-						out.append(self.process(id, tool, res))
+						cmd += "docker exec "+id+fio
+					
+					print cmd
+					res = subprocess.check_output(cmd, shell=True)
+					for item in res.split("\n"):
+							if "iops" in item or "clat" in item:
+									print item.strip()
+					#out.append(self.process(id, tool, res))
 							
 				# if tool is nvme tool=2
 				elif tool == 2:
 					print "Now running NVMe-CLI inside containers..."
+					nvme = " bash -c \" nvme "+nvmeParams+" > /nvme.out\" & "
+					cmd = ""
 					for id in containerIDs:
 						print "\t-Inside container:%s"%id
-						cmd = "docker exec "+id+" nvme "+nvmeParams
-						res = subprocess.check_output(cmd, shell=True)
-						out.append(self.process(id, tool, res))
+						cmd += "docker exec "+id+nvme
+					res = subprocess.check_output(cmd, shell=True)
+					print res
+					#out.append(self.process(id, tool, res))
 				else:
 					## Run both here parallel
 					print "Now running Fio and NVMe-CLI inside containers..."
+					fio = " bash -c \"fio "+fioParams+" --output=fio.out &"
+					nvme = " nvme "+nvmeParams+" > /nvme.out\" &"
+					cmd = ""
 					for id in containerIDs:
 						print "\t-Inside container:%s"%id
-						cmd = "docker exec "+id+" fio "+fioParams+\
-									  " & nvme "+nvmeParams
-						res = subprocess.check_output(cmd, shell=True)
-						out.append(self.process(id, tool, res))
+						cmd += "docker exec "+id+fio+nvme
+					print cmd
+					res = subprocess.check_output(cmd, shell=True)
+					print res
+					#out.append(self.process(containerIDs, tool, res))
 								
 				self.summarize(out)
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
 					print "Please note that NVMe-CLI does not work on HDDs"
-
+					print str(e)
 ## -------------------------------------------------------------------------
 
 		# Process the output and store it in dictionary

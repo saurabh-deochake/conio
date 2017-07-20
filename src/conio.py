@@ -98,15 +98,15 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				path = os.path.abspath(jobfile)
 				d.copyToDocker(ids,path)
 				fioParams= "/"+os.path.basename(jobfile)
-			else:
-				fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+		else:
+			fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 				" --direct="+direct+" --group_reporting="+group_reporting+ \
 				" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 				" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 				" --runtime="+runtime+" --numjobs="+numjobs
 			# run the tool inside containers
-			rt.runTool(tool,ids, fioParams,nvmeParams)
+		rt.runTool(tool,ids, fioParams,nvmeParams)
 
 	# nvme-cli
 	elif tool.lower() == "nvme".lower():
@@ -123,16 +123,16 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				path = os.path.abspath(jobfile)
 				d.copyToDocker(ids, path)
 				fioParams = "/"+os.path.basename(jobfile)
-			else:
-				# gather all parameters, if not mentioned then take default
-				fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+		else:
+			# gather all parameters, if not mentioned then take default
+			fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
 			nvmeParams = "smart-log /dev/nvme0n1"
-			rt.runTool(tool, ids, fioParams, nvmeParams)
+		rt.runTool(tool, ids, fioParams, nvmeParams)
 
 	# stop and remove containers
 	d.cleanup(ids)
