@@ -116,7 +116,7 @@ class Runtime:
 						print "IOPS:"+ op[3].split(",")[2].split("=")[1]
 						print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
 						print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
-						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1].split("[")[1]+" usec"
+						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1]+" usec"
 
 						#print res
 				if tool == 2:
@@ -145,7 +145,7 @@ class Runtime:
 						print "IOPS:"+ op[3].split(",")[2].split("=")[1]
 						print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
 						print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
-						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1].split("[")[1]+" usec"
+						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1]+" usec"
 
 						cmd = "docker exec "+id+" cat /nvme.out"
 						res = subprocess.check_output(cmd, shell=True)
