@@ -131,7 +131,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
-			nvmeParams = "smart-log /dev/nvme0n1"
+		nvmeParams = "smart-log /dev/nvme0n1"
 		rt.runTool(tool, ids, fioParams, nvmeParams)
 
 	# stop and remove containers

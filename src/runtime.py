@@ -96,74 +96,6 @@ class Runtime:
 					print "\n[ERROR] Something went wrong. Try again!"
 					print "Please note that NVMe-CLI does not work on HDDs"
 					print str(e)
-## -------------------------------------------------------------------------
-
-		# Process the output and store it in dictionary
-		def process(self, id, tool, res):
-			try:
-				# store output for each container
-				# use list of dict of dict
-				output = {}
-				output[id] = {}
-				if tool == 1:
-					#only fio
-					lines = res.split("\n")
-					op = res.split("Starting")[1].split("\n")
-					output[id]['Operation'] = lines[0].split(",")[0].split(":")[2].split("=")[1]
-					output[id]['Jobs'] = op[2].split(" ")[2].split("=")[1].split(")")[0]
-					output[id]['Blocksize'] = lines[0].split(",")[1].split("=")[1].split("-")[0]
-					output[id]['Iodepth'] = lines[0].split(",")[3].split("=")[1]
-					output[id]['IOPS'] = op[3].split(",")[2].split("=")[1]
-					output[id]['Bandwidth'] = op[3].split(",")[1].split("=")[1]
-					output[id]['Avg Latency'] = op[5].split(",")[2].split("=")[1]+" usec"
-					output[id]['99.99 Latency'] = op[12].split(" ")[-1][:-1]+" usec"
-				if tool == 2:
-					#only nvme
-					lines = res.split("\n")
-					output[id]['Temperature'] = lines[2].split(":")[1]
-					output[id]['Available Spare'] = lines[3].split(":")[1]
-					output[id]['Percent Used'] = lines[5].split(":")[1]
-					output[id]['Data Units Read'] = lines[6].split(":")[1]
-					output[id]['Data Units Written'] = lines[7].split(":")[1]
-				if tool == 3:
-					#both fio and nvme
-					lines = res.split("\n")
-					op = res.split("Starting")[1].split("\n")
-					output[id]['Operation'] = lines[18].split(",")[0].split(":")[2].split("=")[1]
-					output[id]['Jobs'] = op[2].split(" ")[2].split("=")[1].split(")")[0]
-					output[id]['Blocksize'] = lines[18].split(",")[1].split("=")[1].split("-")[0]
-					output[id]['Iodepth'] = lines[18].split(",")[3].split("=")[1]
-					output[id]['IOPS'] = op[3].split(",")[2].split("=")[1]
-					output[id]['Bandwidth'] = op[3].split(",")[1].split("=")[1]
-					output[id]['Avg Latency'] = op[5].split(",")[2].split("=")[1]+" usec"
-					output[id]['99.99 Latency'] = op[12].split(" ")[-1][:-1]+" usec"
-
-					#NVME part
-					output[id]['Temperature'] = lines[2].split(":")[1]
-					output[id]['Available Spare'] = lines[3].split(":")[1]
-					output[id]['Percent Used'] = lines[5].split(":")[1]
-					output[id]['Data Units Read'] = lines[6].split(":")[1]
-					output[id]['Data Units Written'] = lines[7].split(":")[1]
-				
-				return output
-			except Exception, e:
-					print "\n[ERROR] Something went wrong. Try again!"
-					print str(e)
-## -------------------------------------------------------------------------
-
-		# print the output on screen
-		def summarizeIt(self, output):
-			try:
-				# print the output for each container 
-				for output in output:
-					for key  in output:
-						print "\n---Summary for container:%s---"%key
-						for innerkey in output[key]:
-							print innerkey+"="+output[key][innerkey]
-
-			except Exception, e:
-					print "\n[ERROR] Something went wrong. Try again!"
-					print str(e)
 
 ## ------------------------------------------------------------------------
 
@@ -184,7 +116,7 @@ class Runtime:
 						print "IOPS:"+ op[3].split(",")[2].split("=")[1]
 						print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
 						print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
-						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1]+" usec"
+						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1].split("[")[1]+" usec"
 
 						#print res
 				if tool == 2:
@@ -213,7 +145,7 @@ class Runtime:
 						print "IOPS:"+ op[3].split(",")[2].split("=")[1]
 						print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
 						print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
-						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1]+" usec"
+						print "99.99 Latency:"+ op[12].split(" ")[-1][:-1].split("[")[1]+" usec"
 
 						cmd = "docker exec "+id+" cat /nvme.out"
 						res = subprocess.check_output(cmd, shell=True)
