@@ -56,8 +56,8 @@ from runtime import Runtime
 				help='Time (in minutes) this job will run for')
 @click.option('--numjobs',default="4",
 				help='Number of jobs to carry out benchmarking')
-@click.option('--filename',default='/dev/nvme0n1',
-				help='Path to your disk to run benchmark')
+#@click.option('--filename',default='/dev/nvme0n1',
+#				help='Path to your disk to run benchmark')
 @click.option('--name',default='testrun',help='Name for your job')
 @click.option('--jobfile', help="Path to your fio job file")
 
@@ -66,7 +66,7 @@ from runtime import Runtime
 # command function, handles all parameters
 def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
-				numjobs,filename,name,jobfile):
+				numjobs,name,jobfile):
 	"""Conio- A lightweight script for containerized I/O benchmarking of NVMe SSDs
 	"""
 	print "\nConio- A lightweight script for containerized I/O benchmarking of NVMe SSDs"
@@ -99,7 +99,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				d.copyToDocker(ids,path)
 				fioParams= "/"+os.path.basename(jobfile)
 		else:
-			fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+			fioParams = "--filename=/dev/xvda"+" --name="+name+" --thread="+thread + \
 				" --direct="+direct+" --group_reporting="+group_reporting+ \
 				" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
@@ -112,7 +112,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	elif tool.lower() == "nvme".lower():
 		tool = 2
 		fioParams = None
-		nvmeParams = "smart-log /dev/nvme0n1"
+		nvmeParams = "smart-log /dev/xvda"
 		rt.runTool(tool, ids,fioParams,nvmeParams)
 	# fio and nvme-cli
 	else:
@@ -125,13 +125,13 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				fioParams = "/"+os.path.basename(jobfile)
 		else:
 			# gather all parameters, if not mentioned then take default
-			fioParams = "--filename="+filename+" --name="+name+" --thread="+thread + \
+			fioParams = "--filename=/dev/xvda "+ "--name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
-		nvmeParams = "smart-log /dev/nvme0n1"
+		nvmeParams = "smart-log /dev/xvda"
 		rt.runTool(tool, ids, fioParams, nvmeParams)
 
 	# stop and remove containers

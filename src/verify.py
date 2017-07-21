@@ -106,11 +106,12 @@ class Verify:
 			while(1):
 				# Takes only valid disk file
 				location = raw_input("\t-Where is your NVMe disk located?: ")
+				print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers"
 				if os.path.exists(location):
 					containerIds = []
 					for i in range(num):
 						# spawn containers and mount nvme disk as volume
-						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/nvme0n1:rw saurabhd04/docker_fio tail -f /dev/null"	
+						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null"	
 						res = subprocess.check_output(cmd, shell=True)
 						containerIds.append(res)
 						print "\t-Benchmark container #%s is set up"%(i+1)
