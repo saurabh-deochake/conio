@@ -105,9 +105,21 @@ class Verify:
 			print "\nSetting up %s container(s) for benchmarking..."%num
 			while(1):
 				# Takes only valid disk file
-				location = raw_input("\t-Where is your NVMe disk located?: ")
-				print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers"
+				print "\t-Where is your NVMe disk located?"
+				res = subprocess.check_output("lsblk | grep disk",shell=True)
+				print "\t",
+				lines = res.split("\n")
+				# display all available disks
+				for line in lines:
+					if line.split(" ")[0] == "":
+							continue
+					print "/dev/"+line.split(" ")[0]+"\t",
+				print "\n"
+				location = raw_input("\t-Enter disk name to benchmark:")
+
 				if os.path.exists(location):
+					
+					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers"
 					containerIds = []
 					for i in range(num):
 						# spawn containers and mount nvme disk as volume
@@ -120,7 +132,7 @@ class Verify:
 						#	break
 					return containerIds 
 				else:
-					print "\t-[ERROR] No such file or directory. NVMe-CLI won't work on HDD."
+					print "\n\t-[ERROR] No such file or directory. NVMe-CLI won't work on HDD."
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
 					if op =="N" or op=="n":
 							print "\t-Exiting! Bye!"
