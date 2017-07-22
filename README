@@ -1,2 +1,2 @@
 # conio
-A command-line utility for automatic containerized I/O benchmarking using FIO
+A command-line utility for automatic containerized I/O benchmarking using FIO and NVMe-Cli.
