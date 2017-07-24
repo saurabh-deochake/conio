@@ -73,7 +73,7 @@ class Verify:
 					return False
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Please try again..."
-			print str(e)
+			exit(1)
 
 ## -------------------------------------------------------------------------
 
