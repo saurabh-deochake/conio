@@ -23,7 +23,7 @@ import click
 import os
 
 from runtime import Runtime
-from ConfigParser import SafeConfigParser
+from ConfigParser import RawConfigParser
 
 # all the options
 @click.command()
@@ -82,7 +82,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				exit(1)
 			else:
 				if os.path.exists(config) and os.path.isfile(config):
-					parser = SafeConfigParser()
+					parser = RawConfigParser()
 					parser.read(config)
 					if num == len(parser.sections()):
 						
@@ -103,6 +103,21 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 							print "\t-Already have enough containers running, fetching first %s containers"%num
 						ids = ids[:num]
 
+						if tool.lower()=="nvme".lower():
+							tool = 2
+							fioParams = None
+							nvmeParams = "smart-log /dev/xvda"
+							rt.runTool(tool, ids,fioParams,nvmeParams)
+						else:
+							tool = 3
+							fioParams = []
+							for each_section in parser.sections():
+								param = ""
+								for (each_key, each_val) in parser.items(each_section):
+									param += " --"+each_key+"="+each_val
+								fioParams.append(param)
+								
+							print fioParams
 					else:
 						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
 						print "\nAborting!"
