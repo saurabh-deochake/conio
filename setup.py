@@ -28,7 +28,7 @@ setup(
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',
 	py_modules=['conio'],
-	install_requires=['Click'],
+	install_requires=['Click','configparser'],
 	entry_points='''
 		[console_scripts]
 		conio=src.conio:conio

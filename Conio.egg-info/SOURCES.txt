@@ -1,3 +1,4 @@
+README
 Conio.egg-info/PKG-INFO
 Conio.egg-info/SOURCES.txt
 Conio.egg-info/dependency_links.txt

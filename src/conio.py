@@ -23,6 +23,7 @@ import click
 import os
 
 from runtime import Runtime
+from ConfigParser import SafeConfigParser
 
 # all the options
 @click.command()
@@ -60,82 +61,128 @@ from runtime import Runtime
 #				help='Path to your disk to run benchmark')
 @click.option('--name',default='testrun',help='Name for your job')
 @click.option('--jobfile', help="Path to your fio job file")
+@click.option('--config', help="Path to config file for mixed jobs benchmark")
+@click.option('--mixed_jobs', is_flag=True, default=0, prompt="Enter the config file name:",
+				help='Set this if you want to run different jobs on containers. (A config file is required)')
+
 
 ## ------------------------------------------------------------------------
 
 # command function, handles all parameters
 def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
-				numjobs,name,jobfile):
-	"""Conio- A lightweight script for containerized I/O benchmarking of NVMe SSDs
-	"""
-	print "\nConio- A lightweight script for containerized I/O benchmarking of NVMe SSDs"
-	print "Intel Corporation. 2017."
-
-	# check if Docker is set up properly
-	d = verify.Verify()
-	res = d.verifyEnvironment()
-
-	rt = Runtime()
-	# if not then set up all containers that are required ("num")
-	if not res:
-		d.setupBenchmarkContainer(num)
-		ids = rt.getContainerID(num)
-	elif num>res:
-		d.setupBenchmarkContainer(num-res)
-		ids = rt.getContainerID(num)
-	else:
-		ids = rt.getContainerID(num)
-		print "\t-Already have enough containers running, fetching first %s containers"%num
-	ids = ids[:num]
+				numjobs,name,jobfile,config,mixed_jobs):
+	try:
+		print "\nConio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs"
+		print "Intel Corporation. 2017."
 	
-	# which tool do you want to run?
-	if tool.lower() == "fio".lower():
-		tool = 1
-		nvmeParams = None
-		if jobfile:
-			if os.path.exists(jobfile):
-				path = os.path.abspath(jobfile)
-				d.copyToDocker(ids,path)
-				fioParams= "/"+os.path.basename(jobfile)
-		else:
-			fioParams = "--filename=/dev/xvda"+" --name="+name+" --thread="+thread + \
-				" --direct="+direct+" --group_reporting="+group_reporting+ \
-				" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
-				" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
-				" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
-				" --runtime="+runtime+" --numjobs="+numjobs
-			# run the tool inside containers
-		rt.runTool(tool,ids, fioParams,nvmeParams)
+		if mixed_jobs:
+			if not config:
+				print "\n[ERROR] Config file not provided. Aborting!"
+				exit(1)
+			else:
+				if os.path.exists(config) and os.path.isfile(config):
+					parser = SafeConfigParser()
+					parser.read(config)
+					if num == len(parser.sections()):
+						
+						# check if Docker is set up properly
+						d = verify.Verify()
+						res = d.verifyEnvironment()
+					
+						rt = Runtime()
+						# if not then set up all containers that are required ("num")
+						if not res:
+							d.setupBenchmarkContainer(num)
+							ids = rt.getContainerID(num)
+						elif num>res:
+							d.setupBenchmarkContainer(num-res)
+							ids = rt.getContainerID(num)
+						else:
+							ids = rt.getContainerID(num)
+							print "\t-Already have enough containers running, fetching first %s containers"%num
+						ids = ids[:num]
+					else:
+						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
+						print "\nAborting!"
+						exit(1)
+						
+						
+						
+	
+				else:
+					print "\n[Error] No such file or directory!"
+					exit(1)
+	
+		else:	
+	
+			# check if Docker is set up properly
+			d = verify.Verify()
+			res = d.verifyEnvironment()
 
-	# nvme-cli
-	elif tool.lower() == "nvme".lower():
-		tool = 2
-		fioParams = None
-		nvmeParams = "smart-log /dev/xvda"
-		rt.runTool(tool, ids,fioParams,nvmeParams)
-	# fio and nvme-cli
-	else:
-		tool = "all"
-		tool = 3
-		if jobfile:
-			if os.path.exists(jobfile):
-				path = os.path.abspath(jobfile)
-				d.copyToDocker(ids, path)
-				fioParams = "/"+os.path.basename(jobfile)
-		else:
-			# gather all parameters, if not mentioned then take default
-			fioParams = "--filename=/dev/xvda "+ "--name="+name+" --thread="+thread + \
+			rt = Runtime()
+			# if not then set up all containers that are required ("num")
+			if not res:
+				d.setupBenchmarkContainer(num)
+				ids = rt.getContainerID(num)
+			elif num>res:
+				d.setupBenchmarkContainer(num-res)
+				ids = rt.getContainerID(num)
+			else:
+				ids = rt.getContainerID(num)
+				print "\t-Already have enough containers running, fetching first %s containers"%num
+			ids = ids[:num]
+	
+			# which tool do you want to run?
+			if tool.lower() == "fio".lower():
+				tool = 1
+				nvmeParams = None
+				if jobfile:
+					if os.path.exists(jobfile):
+						path = os.path.abspath(jobfile)
+						d.copyToDocker(ids,path)
+						fioParams= "/"+os.path.basename(jobfile)
+				else:
+					fioParams = "--filename=/dev/xvda"+" --name="+name+" --thread="+thread + \
+					" --direct="+direct+" --group_reporting="+group_reporting+ \
+					" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
+					" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
+					" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
+					" --runtime="+runtime+" --numjobs="+numjobs
+					# run the tool inside containers
+				rt.runTool(tool,ids, fioParams,nvmeParams)
+
+			# nvme-cli
+			elif tool.lower() == "nvme".lower():
+				tool = 2
+				fioParams = None
+				nvmeParams = "smart-log /dev/xvda"
+				rt.runTool(tool, ids,fioParams,nvmeParams)
+			# fio and nvme-cli
+			else:
+				tool = "all"
+				tool = 3
+				if jobfile:
+					if os.path.exists(jobfile):
+						path = os.path.abspath(jobfile)
+						d.copyToDocker(ids, path)
+						fioParams = "/"+os.path.basename(jobfile)
+				else:
+					# gather all parameters, if not mentioned then take default
+					fioParams = "--filename=/dev/xvda "+ "--name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
-		nvmeParams = "smart-log /dev/xvda"
-		rt.runTool(tool, ids, fioParams, nvmeParams)
+				nvmeParams = "smart-log /dev/xvda"
+				rt.runTool(tool, ids, fioParams, nvmeParams)
 
-	# stop and remove containers
-	d.cleanup(ids)
-
+			# stop and remove containers
+			d.cleanup(ids)
+	
+	except Exception, e:
+		print "\n[ERROR] Something went wrong. Try again!"
+		print str(e)
 if __name__ == '__main__':
 	conio()
