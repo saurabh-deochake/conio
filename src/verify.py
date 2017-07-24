@@ -70,7 +70,7 @@ class Verify:
 					return True
 			else:
 					print "\t-[ERROR] Docker daemon is not running"
-					return False
+					exit(1)
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Please try again..."
 			exit(1)
