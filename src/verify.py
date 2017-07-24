@@ -58,7 +58,7 @@ class Verify:
 					return True
 		except Exception, e:
 			print "\t-[ERROR] Is Docker installed? Please install Docker..."
-			print "\t-"+str(e)
+			exit(1)
 
 ## -------------------------------------------------------------------------
 	# Verify if Docker daemon is running
