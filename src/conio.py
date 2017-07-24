@@ -111,13 +111,14 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						else:
 							tool = 3
 							fioParams = []
+							nvmeParams = "smart-log /dev/xvda"
 							for each_section in parser.sections():
 								param = ""
 								for (each_key, each_val) in parser.items(each_section):
 									param += " --"+each_key+"="+each_val
 								fioParams.append(param)
-								
-							print fioParams
+							rt.runTool(tool, ids, fioParams, nvmeParams)				
+							#print fioParams
 					else:
 						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
 						print "\nAborting!"
