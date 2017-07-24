@@ -38,5 +38,24 @@ numjobs=1
 #size=1G
 filename=/dev/xvda
 
+[container3]
+thread=1
+direct=1
+group_reporting=1
+ioengine=libaio
+size=100%
+#gtod_reduce=1
+do_verify=0
+#disable_lat=1
+time_based=1
+cpus_allowed_policy=split
+iodepth=32
+rw=randread
+blocksize=1M
+#blockalign=4k
+runtime=60
+numjobs=32
+#size=1G
+filename=/dev/xvda
 
 

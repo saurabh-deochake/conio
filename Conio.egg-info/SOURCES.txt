@@ -1,7 +1,0 @@
-README
-Conio.egg-info/PKG-INFO
-Conio.egg-info/SOURCES.txt
-Conio.egg-info/dependency_links.txt
-Conio.egg-info/entry_points.txt
-Conio.egg-info/requires.txt
-Conio.egg-info/top_level.txt
