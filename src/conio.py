@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/pythoni
 
 
 """
@@ -62,7 +62,7 @@ from ConfigParser import SafeConfigParser
 @click.option('--name',default='testrun',help='Name for your job')
 @click.option('--jobfile', help="Path to your fio job file")
 @click.option('--config', help="Path to config file for mixed jobs benchmark")
-@click.option('--mixed_jobs', is_flag=True, default=0, prompt="Enter the config file name:",
+@click.option('--mixed_jobs', is_flag=True,
 				help='Set this if you want to run different jobs on containers. (A config file is required)')
 
 
@@ -102,6 +102,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 							ids = rt.getContainerID(num)
 							print "\t-Already have enough containers running, fetching first %s containers"%num
 						ids = ids[:num]
+
 					else:
 						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
 						print "\nAborting!"
