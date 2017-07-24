@@ -165,4 +165,5 @@ class Runtime:
 
 			except Exception, e:
 				print "\n[ERROR] Something went wrong. Try again!"
-				print str(e)
+				print "\nNVMe-CLI only works on NVMe Solid State Drives"
+				exit(1)
