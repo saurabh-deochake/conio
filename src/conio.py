@@ -195,8 +195,8 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				nvmeParams = "smart-log /dev/xvda"
 				rt.runTool(tool, ids, fioParams, nvmeParams)
 
-			# stop and remove containers
-			d.cleanup(ids)
+		# stop and remove containers
+		d.cleanup(ids)
 	
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
