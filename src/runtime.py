@@ -57,14 +57,10 @@ class Runtime:
 					for id, param in zip(containerIDs,fioParams):
 						print "\t-Inside container:%s"%id
 						cmd += "docker exec "+id+ fio+" --name=test "+param+" --output=/fio.out"+nvme
-					#print cmd
-					#print len(containerIDs), len(fioParams)
 					
 					res = subprocess.check_output(cmd, shell=True)
-					self.summarize(tool, containerIDs)
 				
 				else:
-					out = []
 					print "\nGo grab some coffee while I finish benchmarking your containers!\n"
 					#if tool is fio tool=1
 					if tool == 1:
@@ -75,12 +71,8 @@ class Runtime:
 							print "\t-Inside container:%s"%id
 							cmd += "docker exec "+id+fio
 					
-						print cmd
+						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
-						for item in res.split("\n"):
-								if "iops" in item or "clat" in item:
-										print item.strip()
-						#out.append(self.process(id, tool, res))
 							
 					# if tool is nvme tool=2
 					elif tool == 2:
@@ -88,11 +80,10 @@ class Runtime:
 						nvme = " bash -c \" nvme "+nvmeParams+" > /nvme.out\" & "
 						cmd = ""
 						for id in containerIDs:
-							print "\t-Inside container:%s"%id
+							#print "\t-Inside container:%s"%id
 							cmd += "docker exec "+id+nvme
 						res = subprocess.check_output(cmd, shell=True)
 						print res
-						#out.append(self.process(id, tool, res))
 					else:
 						## Run both here parallel
 						print "Now running Fio and NVMe-CLI inside containers..."
@@ -104,10 +95,8 @@ class Runtime:
 							cmd += "docker exec "+id+fio+nvme
 						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
-						#print res
-						#out.append(self.process(containerIDs, tool, res))
 								
-					self.summarize(tool, containerIDs)
+				self.summarize(tool, containerIDs)
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
@@ -147,7 +136,7 @@ class Runtime:
 						print "Percent Used:" + lines[5].split(":")[1]
 						print "Data Units Read:"+ lines[6].split(":")[1]
 						print "Data Units Written:"+ lines[7].split(":")[1]
-				else:
+				if tool == 3:
 					for id in containerIDs:
 						print "\nSummary for container:%s"%id
 						cmd = "docker exec "+id+" cat /fio.out"
