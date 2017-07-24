@@ -143,6 +143,7 @@ class Verify:
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
+			exit(1)
 ## -------------------------------------------------------------------------
 	
 	# Clean up by removing containers
@@ -162,7 +163,7 @@ class Verify:
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
-
+			exit(1)
 
 
 ## -------------------------------------------------------------------------
@@ -177,5 +178,5 @@ class Verify:
 		except Exception, e:
 				print "\n[ERROR] Something went wrong. Try again!"
 				print str(e)
-
+				exit(1)
 
