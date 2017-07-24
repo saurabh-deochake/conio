@@ -119,7 +119,7 @@ class Verify:
 
 				if os.path.exists(location):
 					
-					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers"
+					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers\n"
 					containerIds = []
 					for i in range(num):
 						# spawn containers and mount nvme disk as volume
