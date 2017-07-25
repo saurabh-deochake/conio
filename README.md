@@ -51,7 +51,7 @@ Options:
 ### Example
 
 ```
-conio --num=2 --tool=fio
+$ conio --num=2 --tool=fio
 
 Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
 Intel Corporation. 2017.
