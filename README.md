@@ -100,3 +100,8 @@ Cleanup the environment? [y|N]:y
         -[INFO] Removing container:6226f32e98d7
         -[INFO] Removing container:90875dc7b1ea
 ```
+### Contributing
+If you are interested in becoming a contributer to this project, then please fork the project. As this project is in alpha testing, some things may break. Please create an issue on the repo if you find something broken. 
+
+### Author
+The tool conio was written by [Saurabh Deochake](https://saurabh-deochake.github.io) for Intel Corporation. 
