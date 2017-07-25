@@ -1,5 +1,5 @@
 # conio
-A command line tool for automatic containerized I/O benchmarking of Docker containers.
+A command line tool for automatic containerized I/O benchmarking of cloud storage.
 
 #### Current status    
 alpha testing       
