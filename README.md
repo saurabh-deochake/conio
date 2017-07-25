@@ -103,5 +103,10 @@ Cleanup the environment? [y|N]:y
 ### Contributing
 If you are interested in becoming a contributer to this project, then please fork the project. As this project is in alpha testing, some things may break. Please create an issue on the repo if you find something broken. 
 
+### License
+The tool is made avaiable under Apache 2.0 license. Please read the terms of license located in LICENSE file.
+
 ### Author
 The tool conio was written by [Saurabh Deochake](https://saurabh-deochake.github.io) for Intel Corporation. 
+
+
