@@ -48,3 +48,55 @@ Options:
                                   on containers. (A config file is required)
   --help                          Show this message and exit.
 ```
+### Example
+
+```
+conio --num=2 --tool=fio
+
+Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+Intel Corporation. 2017.
+
+Verifying Docker enviroment...
+        -[INFO] Docker container for benchmarking already set up
+
+Setting up 1 container(s) for benchmarking...
+        -Where is your NVMe disk located?
+        /dev/sda        /dev/sdb        /dev/nvme0n1
+
+        -Enter disk name to benchmark:/dev/nvme0n1
+        -[INFO] NVMe disk will be mounted at /dev/xvda inside containers
+
+        -Benchmark container #1 is set up
+        -[INFO] New Container ID:6226f32e98d7af0affc4bb38a55e89211f64abf59e664756d10602763619f53e
+
+
+Go grab some coffee while I finish benchmarking your containers!
+
+Now running Fio inside containers...
+        -Inside container:6226f32e98d7
+        -Inside container:90875dc7b1ea
+
+Summary for container:6226f32e98d7
+Operation:randread
+Jobs:4
+Blocksize:4K
+Iodepth:32
+IOPS:165710
+Bandwidth:662841KB/s
+Avg Latency:760.18 usec
+99.99 Latency: 4832 usec
+
+Summary for container:90875dc7b1ea
+Operation:randread
+Jobs:4
+Blocksize:4K
+Iodepth:32
+IOPS:156134
+Bandwidth:624538KB/s
+Avg Latency:808.54 usec
+99.99 Latency: 4960 usec
+
+Cleanup the environment? [y|N]:y
+        -[INFO] Removing container:6226f32e98d7
+        -[INFO] Removing container:90875dc7b1ea
+```
