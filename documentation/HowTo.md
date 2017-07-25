@@ -30,6 +30,42 @@ to make sure our set up runs smooth.
   ...
   ```
   
-* Install Docker
+* **Docker**
+ In order to run the tool, it is mandatory that we have Docker installed and docker service is enabled and running.    
+  * Install Docker    
+  Install the latest version of Docker using yum.   
+  
+  `$sudo yum -y install docker`
+  
+  * Start Docker service
+  Now that Docker is installed, let's start docker service using    
+  `$ systemctl start docker`
+  
+  * Proxy for Docker
+  The tool pulls the image from `saurabhd04/docker_fio` in order to launch the containers and run I/O benchmarking inside. Therefore, in order for `docker pull` to be successful, we must mention proxy settings for Docker. Run following commands for Docker behind proxy:    
+  
+  ```
+  $ mkdir /etc/systemd/system/docker.service.d
+  $ vi /etc/systemd/system/docker.service.d/http-proxy.conf
+  
+  [Service]
+  Environment="HTTP_PROXY=http://proxy.something.com:port/"
+  
+  $ sudo systemctl daemon-reload
+  $ sudo systemctl restart docker
+  ```
+  Now, your Docker environment is set up.
+  
+* **Python Pip Installer**
+  We use Pip installer to install the tool on to a system. So, if you do not already have pip installed, install it using yum. For CentOS, the package `python-pip` is available in EPEL repository. So, please download epel repo and then install pip.   
+  
+  ```
+  $ sudo yum --enablerepo=extras install epel-release
+  $ sudo yum -y install python-pip
+  ```
+  
+* **Installing conio**
+  Now, 
+  
 
   
