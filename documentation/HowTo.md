@@ -15,7 +15,9 @@ to make sure our set up runs smooth.
 
   * Git behind proxy   
   Next, we have to set up `http_proxy` for git for smoothly downloading and installing conio through source code. Run the command    
-  ```$ git config --global http.proxy http://proxy.something.com:port```
+  ```
+  $ git config --global http.proxy http://proxy.something.com:port
+  ```
   
   * Yum behind proxy
   To install conio on your system, we need Python's pip installer. We need to make some changes to `/etc/yum.conf` so that yum works behind a proxy. Run following commands to make sure your package installer works behind the proxy.    
@@ -35,7 +37,9 @@ to make sure our set up runs smooth.
   * Install Docker    
   Install the latest version of Docker using yum.   
   
-  ```$sudo yum -y install docker```
+  ```
+  $ sudo yum -y install docker
+  ```
   
   * Start Docker service
   Now that Docker is installed, let's start docker service using    
@@ -67,10 +71,14 @@ to make sure our set up runs smooth.
 * **Installing conio**     
   Now that we have made necessary arrangements, now install conio on to your system.   
   * Download the source   
-   ```$ git clone https://github.com/saurabh-deochake/conio.git```
+   ```
+   $ git clone https://github.com/saurabh-deochake/conio.git
+   ```
     
   * Install   
-   ```$ python setup.py install```
+   ```
+   $ python setup.py install
+   ```
    Now, if this gets stuck in fulfilling the requirements of packages, you may need to manually install `click` and `configparser` python packages using    
    ```
    $ pip install click
