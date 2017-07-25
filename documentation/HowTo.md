@@ -30,7 +30,7 @@ to make sure our set up runs smooth.
   ...
   ```
   
-* **Docker**
+* **Docker**   
  In order to run the tool, it is mandatory that we have Docker installed and docker service is enabled and running.    
   * Install Docker    
   Install the latest version of Docker using yum.   
@@ -56,7 +56,7 @@ to make sure our set up runs smooth.
   ```
   Now, your Docker environment is set up.
   
-* **Python Pip Installer**
+* **Python Pip Installer**    
   We use Pip installer to install the tool on to a system. So, if you do not already have pip installed, install it using yum. For CentOS, the package `python-pip` is available in EPEL repository. So, please download epel repo and then install pip.   
   
   ```
@@ -64,8 +64,23 @@ to make sure our set up runs smooth.
   $ sudo yum -y install python-pip
   ```
   
-* **Installing conio**
-  Now, 
+* **Installing conio**     
+  Now that we have made necessary arrangements, now install conio on to your system.   
+  * Download the source   
+    `$ git clone https://github.com/saurabh-deochake/conio.git`
+    
+  * Install   
+   `$ python setup.py install`
+   Now, if this gets stuck in fulfilling the requirements of packages, you may need to manually install `click` and `configparser` python packages using    
+   ```
+   $ pip install click
+   $ pip install configparser
+   ```
+   
+#### Disclaimer   
+NVMe-Cli utility is used inside the containers using Conio. NVMe-Cli is specifically used to get `smartctl`-style information for NVMe storage drives. NVMe-Cli will not work on traditional hard drives. So, even if you run Conio with both tools, you will see only FIO output for your storage drive. Running NVMe-Cli on traditional hard drives may throw an error. 
+
+
   
 
   
