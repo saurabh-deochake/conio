@@ -43,7 +43,9 @@ to make sure our set up runs smooth.
   
   * Start Docker service
   Now that Docker is installed, let's start docker service using    
-  ```$ systemctl start docker```
+  ```
+  $ systemctl start docker
+  ```
   
   * Proxy for Docker
   The tool pulls the image from `saurabhd04/docker_fio` in order to launch the containers and run I/O benchmarking inside. Therefore, in order for `docker pull` to be successful, we must mention proxy settings for Docker. Run following commands for Docker behind proxy:    
