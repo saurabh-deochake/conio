@@ -1,7 +1,7 @@
 ### Setting up Conio on your system
 This is a step-by-step guide to setup conio on your system. The tutorial also discusses potential problems and how to fix them. 
 
-1. Proxy Setting   
+* **Proxy Setting**   
 If you are sitting behind a proxy, then you have to change a few settings, environment variables and make configuration files 
 to make sure our set up runs smooth.
 
@@ -30,6 +30,6 @@ to make sure our set up runs smooth.
   ...
   ```
   
-2. Install Docker
+* Install Docker
 
   
