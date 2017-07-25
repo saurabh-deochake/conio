@@ -1,4 +1,5 @@
-# conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=RxYsxYxhaD6syK9zknyr&branch=master) ![](https://nodesecurity.io/orgs/saurabh-github/projects/140144bd-6f3f-40cc-9211-0c5d5a99b362/badge)
+# conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=RxYsxYxhaD6syK9zknyr&branch=master) ![](https://nodesecurity.io/orgs/saurabh-github/projects/140144bd-6f3f-40cc-9211-0c5d5a99b362/badge)[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
+
 A command line tool for automatic containerized I/O benchmarking of cloud storage.
 
 #### Current status    
