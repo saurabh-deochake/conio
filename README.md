@@ -1,4 +1,4 @@
-# conio
+# conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=RxYsxYxhaD6syK9zknyr&branch=master)
 A command line tool for automatic containerized I/O benchmarking of cloud storage.
 
 #### Current status    
