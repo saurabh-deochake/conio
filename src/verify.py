@@ -116,7 +116,8 @@ class Verify:
 					print "/dev/"+line.split(" ")[0]+"\t",
 				print "\n"
 				location = raw_input("\t-Enter disk name to benchmark:")
-
+				if "nvme" not in location:
+					print "\t-[WARNING] NVMe-Cli does not work on HDD" 
 				if os.path.exists(location):
 					
 					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers\n"
@@ -130,7 +131,7 @@ class Verify:
 						print "\t-[INFO] New Container ID:"+res
 						#if res == "":
 						#	break
-					return containerIds 
+					return containerIds, location
 				else:
 					print "\n\t-[ERROR] No such file or directory. NVMe-CLI won't work on HDD."
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")

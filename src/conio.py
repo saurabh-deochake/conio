@@ -75,7 +75,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	try:
 		print "\nConio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs"
 		print "Intel Corporation. 2017."
-	
+		#location = ""	
 		if mixed_jobs:
 			if not config:
 				print "\n[ERROR] Config file not provided. Aborting!"
@@ -93,23 +93,30 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						rt = Runtime()
 						# if not then set up all containers that are required ("num")
 						if not res:
-							d.setupBenchmarkContainer(num)
+							_, location = d.setupBenchmarkContainer(num)
 							ids = rt.getContainerID(num)
+							if "nvme" not in location: flag=1
 						elif num>res:
-							d.setupBenchmarkContainer(num-res)
+							_, location = d.setupBenchmarkContainer(num-res)
 							ids = rt.getContainerID(num)
+							if "nvme" not in location: flag=1
 						else:
 							ids = rt.getContainerID(num)
 							print "\t-Already have enough containers running, fetching first %s containers"%num
 						ids = ids[:num]
 
 						if tool.lower()=="nvme".lower():
-							tool = 2
-							fioParams = None
-							nvmeParams = "smart-log /dev/xvda"
-							rt.runTool(tool, ids,fioParams,nvmeParams)
+							if flag:
+								print "\n[ERROR] NVMe-CLI does not work on HDD"
+								exit(1)
+							else:
+								tools = 2
+								fioParams = None
+								nvmeParams = "smart-log /dev/xvda"
+								rt.runTool(tool, ids,fioParams,nvmeParams)
 						else:
-							tool = 3
+							tools = 1 if flag else 3
+							#tools = 3
 							fioParams = []
 							nvmeParams = "smart-log /dev/xvda"
 							for each_section in parser.sections():
@@ -117,7 +124,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 								for (each_key, each_val) in parser.items(each_section):
 									param += " --"+each_key+"="+each_val
 								fioParams.append(param)
-							rt.runTool(tool, ids, fioParams, nvmeParams)				
+							rt.runTool(tools, ids, fioParams, nvmeParams)				
 							#print fioParams
 					else:
 						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
@@ -140,11 +147,13 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 			rt = Runtime()
 			# if not then set up all containers that are required ("num")
 			if not res:
-				d.setupBenchmarkContainer(num)
+				_,location=d.setupBenchmarkContainer(num)
 				ids = rt.getContainerID(num)
+				if ("nvme" not in location) and (tool=="nvme" or tool=="all"): flag=1
 			elif num>res:
-				d.setupBenchmarkContainer(num-res)
+				_,location=d.setupBenchmarkContainer(num-res)
 				ids = rt.getContainerID(num)
+				if ("nvme" not in location) and (tool=="nvme" or tool=="all") : flag=1
 			else:
 				ids = rt.getContainerID(num)
 				print "\t-Already have enough containers running, fetching first %s containers"%num
@@ -152,7 +161,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	
 			# which tool do you want to run?
 			if tool.lower() == "fio".lower():
-				tool = 1
+				tools = 1
 				nvmeParams = None
 				if jobfile:
 					if os.path.exists(jobfile):
@@ -167,18 +176,24 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 					" --runtime="+runtime+" --numjobs="+numjobs
 					# run the tool inside containers
-				rt.runTool(tool,ids, fioParams,nvmeParams)
+				rt.runTool(tools,ids, fioParams,nvmeParams)
 
 			# nvme-cli
 			elif tool.lower() == "nvme".lower():
-				tool = 2
-				fioParams = None
-				nvmeParams = "smart-log /dev/xvda"
-				rt.runTool(tool, ids,fioParams,nvmeParams)
+				if flag:
+					print "\n[ERROR] NVMe-CLI does not work on HDD"
+					exit(1)
+				else:
+					tools = 2
+					fioParams = None
+					nvmeParams = "smart-log /dev/xvda"
+					rt.runTool(tools, ids,fioParams,nvmeParams)
 			# fio and nvme-cli
 			else:
 				tool = "all"
-				tool = 3
+				tools=1 if flag else 3
+				
+								
 				if jobfile:
 					if os.path.exists(jobfile):
 						path = os.path.abspath(jobfile)
@@ -193,7 +208,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
 				nvmeParams = "smart-log /dev/xvda"
-				rt.runTool(tool, ids, fioParams, nvmeParams)
+				rt.runTool(tools, ids, fioParams, nvmeParams)
 
 		# stop and remove containers
 		d.cleanup(ids)
