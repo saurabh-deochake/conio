@@ -216,5 +216,6 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)
+
 if __name__ == '__main__':
 	conio()
