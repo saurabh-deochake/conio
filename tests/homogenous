@@ -1,0 +1,186 @@
+"""
+ http://www.apache.org/licenses/LICENSE-2.0.txt
+ Copyright 2017 Intel Corporation
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+     http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: Saurabh Deochake, Intel Corporation
+"""
+
+* Default parameters: If you do not provide any fio parameters to the tool,
+it takes following default parameters:
+
+--rw=randread --numjobs=4 --iodepth=32 --blocksize=4k --ioengine=libaio 
+--thread=1 --group_reporting=1 --size=100% --time_based=1 --runtime=60
+
+Override these default options if you want to run different job types by
+mentioning the same above options with different values that you like.
+
+-----------------------------------------------------------------------------
+
+1) 2 Containers, All tools (Fio, NVMe-cli)
+[root@node2 src]# conio --num=2 --tool=all
+
+Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+Intel Corporation. 2017.
+
+Verifying Docker enviroment...
+ -[OK] Docker is installed and running
+
+Setting up 2 container(s) for benchmarking...
+ -Where is your NVMe disk located?
+ /dev/sda /dev/sdb /dev/nvme0n1
+
+ -Enter disk name to benchmark:/dev/nvme0n1
+ -[INFO] NVMe disk will be mounted at /dev/xvda inside containers
+
+ -Benchmark container #1 is set up
+ -[INFO] New Container ID:31cd09c4c9f92c65be1515c38579ef42f53628db4f7dcc5e9bfca6bc8e268c2c
+
+ -Benchmark container #2 is set up
+ -[INFO] New Container ID:124bd120dad9d5538a9081c624afea7a5ab07d19a6c03f3560d0c68f436edc54
+
+
+Go grab some coffee while I finish benchmarking your containers!
+
+Now running Fio and NVMe-CLI inside containers...
+ -Inside container:124bd120dad9
+ -Inside container:31cd09c4c9f9
+
+Summary for container:124bd120dad9
+
+---------FIO------------
+Operation:randread
+Jobs:4
+Blocksize:4K
+Iodepth:32
+IOPS:164186
+Bandwidth:656748KB/s
+Avg Latency:769.28 usec
+99.99 Latency: 4576 usec
+
+--------NVME------------
+Temperature: 24 C
+Available Spare: 100%
+Percent Used: 0%
+Data Units Read: 1335970
+Data Units Written: 2688553
+
+Summary for container:31cd09c4c9f9
+
+---------FIO------------
+Operation:randread
+Jobs:4
+Blocksize:4K
+Iodepth:32
+IOPS:159654
+Bandwidth:638620KB/s
+Avg Latency:791.56 usec
+99.99 Latency: 4640 usec
+
+--------NVME------------
+Temperature: 24 C
+Available Spare: 100%
+Percent Used: 0%
+Data Units Read: 1335970
+Data Units Written: 2688553
+
+Cleanup the environment? [y|N]:y
+ -[INFO] Removing container:124bd120dad9
+ -[INFO] Removing container:31cd09c4c9f9
+
+----------------------------------------------------------------------------
+
+2) 2 containers, Tool=Fio
+
+[root@node2 src]# conio --num=2 --tool=fio --iodepth=1 --numjobs=1 --rw=write
+
+Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+Intel Corporation. 2017.
+
+Verifying Docker enviroment...
+ -[OK] Docker is installed and running
+
+Setting up 2 container(s) for benchmarking...
+ -Where is your NVMe disk located?
+ /dev/sda /dev/sdb /dev/nvme0n1
+
+ -Enter disk name to benchmark:/dev/nvme0n1
+ -[INFO] NVMe disk will be mounted at /dev/xvda inside containers
+
+ -Benchmark container #1 is set up
+ -[INFO] New Container ID:501352588a7f98028a4bbec459afd91c991bb93540c6e75fda7bf73dd4261822
+
+ -Benchmark container #2 is set up
+ -[INFO] New Container ID:cdf7596d1b188950b39c5f9debe8d219e625dc972e4ea052796e9ef417b7da53
+
+
+Go grab some coffee while I finish benchmarking your containers!
+
+Now running Fio inside containers...
+ -Inside container:cdf7596d1b18
+ -Inside container:501352588a7f
+
+Summary for container:cdf7596d1b18
+Operation:write
+Jobs:1
+Blocksize:4K
+Iodepth:1
+IOPS:11486
+Bandwidth:45946KB/s
+Avg Latency:60.68 usec
+99.99 Latency:  940 usec
+
+Summary for container:501352588a7f
+Operation:write
+Jobs:1
+Blocksize:4K
+Iodepth:1
+IOPS:11489
+Bandwidth:45958KB/s
+Avg Latency:60.51 usec
+99.99 Latency:  932 usec
+
+Cleanup the environment? [y|N]:n
+
+----------------------------------------------------------------------------
+
+3) 2 containers, Tool=NVMe-cli
+
+[root@node2 src]# conio --num=2 --tool=nvme
+
+Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+Intel Corporation. 2017.
+
+Verifying Docker enviroment...
+ -[INFO] Docker container for benchmarking already set up
+ -Already have enough containers running, fetching first 2 containers
+
+Go grab some coffee while I finish benchmarking your containers!
+
+Now running NVMe-CLI inside containers...
+
+
+Summary for container:cdf7596d1b18
+Temperature: 24 C
+Available Spare: 100%
+Percent Used: 0%
+Data Units Read: 1491418
+Data Units Written: 2699582
+
+Summary for container:501352588a7f
+Temperature: 24 C
+Available Spare: 100%
+Percent Used: 0%
+Data Units Read: 1491418
+Data Units Written: 2699582
+
+Cleanup the environment? [y|N]:n
+

@@ -85,7 +85,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					parser = RawConfigParser()
 					parser.read(config)
 					if num == len(parser.sections()):
-						
+						flag = 0
 						# check if Docker is set up properly
 						d = verify.Verify()
 						res = d.verifyEnvironment()
@@ -143,7 +143,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 			# check if Docker is set up properly
 			d = verify.Verify()
 			res = d.verifyEnvironment()
-
+			flag = 0
 			rt = Runtime()
 			# if not then set up all containers that are required ("num")
 			if not res:
