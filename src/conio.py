@@ -26,8 +26,12 @@ from runtime import Runtime
 from ConfigParser import RawConfigParser
 
 @click.group()
-#@click.pass_context
+@click.version_option(version='1.0.0')
 def conio():
+	"""
+	Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+	Copyright Intel Corporation. 2017.
+	"""
 	pass
 
 @conio.command()
