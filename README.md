@@ -17,11 +17,24 @@ alpha testing
 * Install on your system    
 `python setup.py install`
 
-```    
-$ conio --help
-Usage: conio [OPTIONS]
+```
+# conio --help
+Usage: conio [OPTIONS] COMMAND [ARGS]...
 
 Options:
+  --help  Show this message and exit.
+
+Commands:
+  clean  Stop and remove containers
+  run    Run tools inside containers
+```
+
+```    
+# conio run --help
+Usage: conio run [OPTIONS]
+
+Run tools inside containers
+
   --tool [fio|nvme|all]           I/O benchmark tools to run: fio/nvme/all
                                   (both: default)
   --num INTEGER                   Number of containers to spawn for
@@ -50,9 +63,9 @@ Options:
   --help                          Show this message and exit.
 ```
 ### Example
-
+* Run
 ```
-$ conio --num=2 --tool=fio
+$ conio run --num=2 --tool=fio
 
 Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
 Intel Corporation. 2017.
@@ -96,6 +109,10 @@ IOPS:156134
 Bandwidth:624538KB/s
 Avg Latency:808.54 usec
 99.99 Latency: 4960 usec
+```
+* Clean
+```
+# conio clean
 
 Cleanup the environment? [y|N]:y
         -[INFO] Removing container:6226f32e98d7
