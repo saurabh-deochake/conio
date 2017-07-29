@@ -25,8 +25,22 @@ import os
 from runtime import Runtime
 from ConfigParser import RawConfigParser
 
+@click.group()
+#@click.pass_context
+def conio():
+	pass
+
+@conio.command()
+#@click.pass_context()
+def clean():
+	d = verify.Verify()
+	rt = Runtime()
+	ids = rt.getContainerID(10)
+	d.cleanup(ids)
+
 # all the options
-@click.command()
+@conio.command()
+#@click.pass_context()
 @click.option('--tool',default='all',type=click.Choice(['fio','nvme','all']),
 				help='I/O benchmark tools to run: fio/nvme/all (both: default)')
 @click.option('--num', default=1,
@@ -69,7 +83,7 @@ from ConfigParser import RawConfigParser
 ## ------------------------------------------------------------------------
 
 # command function, handles all parameters
-def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
+def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
 				numjobs,name,jobfile,config,mixed_jobs):
 	try:
@@ -161,7 +175,7 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				ids = rt.getContainerID(num)
 				print "\t-Already have enough containers running, fetching first %s containers"%num
 			ids = ids[:num]
-	
+			#print ids
 			# which tool do you want to run?
 			if tool.lower() == "fio".lower():
 				tools = 1
@@ -215,10 +229,15 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 
 		# stop and remove containers
 		d.cleanup(ids)
+		#clean(ids)
 	
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)
 
+
+
+
 if __name__ == '__main__':
 	conio()
+

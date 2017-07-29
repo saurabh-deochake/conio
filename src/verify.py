@@ -180,4 +180,21 @@ class Verify:
 				print "\n[ERROR] Something went wrong. Try again!"
 				print str(e)
 				exit(1)
+## --------------------------------------------------------------------------
+   
+    # Get the IDs of containers running
+   	def getContainerID(self, num):
+		try:
+			containerIDs = []
+			# check if docker container with specific image is running
+			res = subprocess.check_output("docker ps | grep docker_fio",shell=True)
+			#gather ids for all containers
+			for cont in res.split("\n"):
+				id = cont.split(" ")[0]
+				if id:
+					containerIDs.append(cont.split(" ")[0])
+					return containerIDs
+		except Exception, e:
+			print "\nNothing to clean"
+			exit(1)
 

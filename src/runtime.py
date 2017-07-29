@@ -37,10 +37,11 @@ class Runtime:
 						id = cont.split(" ")[0]
 						if id:
 								containerIDs.append(cont.split(" ")[0])
+				#print containerIDs
 				return containerIDs
 			except Exception, e:
-					print "\n[ERROR] Something went wrong. Try again!"
-					print str(e)
+					print "\nNothing to clean. Aborting!"
+					exit(1)
 
 ## -------------------------------------------------------------------------
 
