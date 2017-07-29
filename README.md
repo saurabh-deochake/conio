@@ -17,11 +17,24 @@ alpha testing
 * Install on your system    
 `python setup.py install`
 
-```    
-$ conio --help
-Usage: conio [OPTIONS]
+```
+# conio --help
+Usage: conio [OPTIONS] COMMAND [ARGS]...
 
 Options:
+  --help  Show this message and exit.
+
+Commands:
+  clean  Stop and remove containers
+  run    Run tools inside containers
+```
+
+```    
+# conio run --help
+Usage: conio run [OPTIONS]
+
+Run tools inside containers
+
   --tool [fio|nvme|all]           I/O benchmark tools to run: fio/nvme/all
                                   (both: default)
   --num INTEGER                   Number of containers to spawn for
