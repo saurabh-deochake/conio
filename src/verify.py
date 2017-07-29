@@ -20,6 +20,7 @@ Author: Saurabh Deochake, Intel Corporation
 """
 
 import os
+import stat
 import subprocess
 import sys; sys.dont_write_bytecode = True
 
@@ -118,7 +119,8 @@ class Verify:
 				location = raw_input("\t-Enter disk name to benchmark:")
 				if "nvme" not in location:
 					print "\t-[WARNING] NVMe-Cli does not work on HDD" 
-				if os.path.exists(location):
+				if stat.S_ISBLK(os.stat(location).st_mode): 
+				#os.path.exists(location):# and (location != ".." or location != "."):
 					
 					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers\n"
 					containerIds = []
@@ -133,7 +135,7 @@ class Verify:
 						#	break
 					return containerIds, location
 				else:
-					print "\n\t-[ERROR] No such file or directory. NVMe-CLI won't work on HDD."
+					print "\n\t-[ERROR] Not a block device"
 					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
 					if op =="N" or op=="n":
 							print "\t-Exiting! Bye!"

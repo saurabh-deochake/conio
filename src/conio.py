@@ -33,6 +33,8 @@ def conio():
 @conio.command()
 #@click.pass_context()
 def clean():
+	"""Stop and remove containers"""
+		
 	d = verify.Verify()
 	rt = Runtime()
 	ids = rt.getContainerID(10)
@@ -86,6 +88,7 @@ def clean():
 def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
 				numjobs,name,jobfile,config,mixed_jobs):
+	"""Run tools inside containers"""
 	try:
 		if os.getuid() != 0:
 			print "\n[ERROR] Cannot run with non-root user. Aborting!"
