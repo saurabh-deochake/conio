@@ -73,6 +73,9 @@ def conio(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
 				numjobs,name,jobfile,config,mixed_jobs):
 	try:
+		if os.getuid() != 0:
+			print "\n[ERROR] Cannot run with non-root user. Aborting!"
+			exit(1)
 		print "\nConio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs"
 		print "Intel Corporation. 2017."
 		#location = ""	
