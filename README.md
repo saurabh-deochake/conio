@@ -21,12 +21,17 @@ alpha testing
 # conio --help
 Usage: conio [OPTIONS] COMMAND [ARGS]...
 
+  Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
+  Copyright Intel Corporation. 2017.
+
 Options:
-  --help  Show this message and exit.
+  --version  Show the version and exit.
+  --help     Show this message and exit.
 
 Commands:
-  clean  Stop and remove containers
-  run    Run tools inside containers
+  clean   Stop and remove containers
+  create  Create and launch containers
+  run     Run tools inside containers
 ```
 
 ```    
@@ -63,6 +68,26 @@ Run tools inside containers
   --help                          Show this message and exit.
 ```
 ### Example
+* Create    
+```
+$ conio create --num=2
+
+Setting up 2 container(s) for benchmarking...
+        -Where is your NVMe disk located?
+        /dev/sda        /dev/sdb        /dev/nvme0n1
+
+        -Enter disk name to benchmark:/dev/sda
+        -[WARNING] NVMe-Cli does not work on HDD. Continue? (y|N):y
+        -[INFO] NVMe disk will be mounted at /dev/xvda inside containers
+
+        -Benchmark container #1 is set up
+        -[INFO] New Container ID:1aa125a86b4f2e429c294a6d39828a34bed39fa63da0645b10f56c55c5f9d46f
+
+        -Benchmark container #2 is set up
+        -[INFO] New Container ID:6e157f6c2a57355d22037a6d7bdcd216d6918b6faeb78f48edd44d849b101c43
+
+```    
+
 * Run
 ```
 $ conio run --num=2 --tool=fio
