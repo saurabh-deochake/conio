@@ -40,10 +40,10 @@ Usage: conio run [OPTIONS]
 
 Run tools inside containers
 
+Options:
   --tool [fio|nvme|all]           I/O benchmark tools to run: fio/nvme/all
                                   (both: default)
-  --num INTEGER                   Number of containers to spawn for
-                                  benchmarking
+  --num INTEGER                   Number of containers to benchmark
   --thread TEXT                   Run jobs as threads
   --direct TEXT                   Force Direct I/O
   --group_reporting TEXT          Get consolidated result for all job
