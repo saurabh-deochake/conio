@@ -33,8 +33,7 @@ flag = 0
 @click.version_option(version='1.0.0')
 def conio():
 	"""
-	Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
-	Copyright Intel Corporation. 2017.
+	Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage 
 	"""
 	pass
 ## -------------------------------------------------------------------------
