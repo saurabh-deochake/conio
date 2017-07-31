@@ -1,9 +1,13 @@
 # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=RxYsxYxhaD6syK9zknyr&branch=master) ![](https://nodesecurity.io/orgs/saurabh-github/projects/140144bd-6f3f-40cc-9211-0c5d5a99b362/badge) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
 
-A command line tool for automatic containerized I/O benchmarking of cloud storage.
+A command line tool for automatic containerized I/O benchmarking of cloud storage.     
+Copyright Intel Corporation. 2017.
+
+#### Releases
+* [Conio v1.0.0](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.0)
 
 #### Current status    
-alpha testing       
+beta testing       
 
 #### Features
 * Launch specified number of Docker containers automatically     
