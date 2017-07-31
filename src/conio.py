@@ -25,6 +25,10 @@ import os
 from runtime import Runtime
 from ConfigParser import RawConfigParser
 
+## Global flag for disk type
+flag = 0
+
+## --------------------------------------------------------------------------
 @click.group()
 @click.version_option(version='1.0.0')
 def conio():
@@ -33,16 +37,53 @@ def conio():
 	Copyright Intel Corporation. 2017.
 	"""
 	pass
+## -------------------------------------------------------------------------
 
+# Stop and remove containers
 @conio.command()
 #@click.pass_context()
 def clean():
 	"""Stop and remove containers"""
+ 	try:		
+		d = verify.Verify()
+		rt = Runtime()
+		ids = rt.getContainerID(10)
+		d.cleanup(ids)
+	except Exception, e:
+		print "\n[ERROR] Something went wrong. Try again!"
+		print str(e)
+		exit(1)
+
+## -------------------------------------------------------------------------
+
+# create --num containers
+@conio.command()
+@click.option('--num', default=1,
+				help='Number of containers to spawn for benchmarking')
+
+def create(num):
+	"""Create and launch containers"""
+	try:
+		global flag
+		# check if Docker is set up properly
+		d = verify.Verify()
+		#res = d.verifyEnvironment()
+
+		rt = Runtime()
+		#if not then set up all containers that are required ("num")
+		#if not res:
+		_, location = d.setupBenchmarkContainer(num)
+		ids = rt.getContainerID(num)
+		if "nvme" not in location: flag=1
 		
-	d = verify.Verify()
-	rt = Runtime()
-	ids = rt.getContainerID(10)
-	d.cleanup(ids)
+
+	except Exception, e:
+		print "\n[ERROR] Something went wrong. Try again!"
+		print str(e)
+		exit(1)
+
+
+## -------------------------------------------------------------------------
 
 # all the options
 @conio.command()
@@ -94,11 +135,12 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				numjobs,name,jobfile,config,mixed_jobs):
 	"""Run tools inside containers"""
 	try:
+		global flag
 		if os.getuid() != 0:
 			print "\n[ERROR] Cannot run with non-root user. Aborting!"
 			exit(1)
 		print "\nConio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs"
-		print "Intel Corporation. 2017."
+		print "Copyright Intel Corporation. 2017."
 		#location = ""	
 		if mixed_jobs:
 			if not config:
@@ -109,7 +151,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					parser = RawConfigParser()
 					parser.read(config)
 					if num == len(parser.sections()):
-						flag = 0
+						#global flag
 						# check if Docker is set up properly
 						d = verify.Verify()
 						res = d.verifyEnvironment()
@@ -167,7 +209,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 			# check if Docker is set up properly
 			d = verify.Verify()
 			res = d.verifyEnvironment()
-			flag = 0
+			#global flag
 			rt = Runtime()
 			# if not then set up all containers that are required ("num")
 			if not res:

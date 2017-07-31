@@ -139,30 +139,34 @@ class Runtime:
 						print "Data Units Written:"+ lines[7].split(":")[1]
 				if tool == 3:
 					for id in containerIDs:
-						print "\nSummary for container:%s"%id
-						cmd = "docker exec "+id+" cat /fio.out"
-						res = subprocess.check_output(cmd, shell=True)
-						print "\n---------FIO------------"
-						lines = res.split("\n")
-						op = res.split("Starting")[1].split("\n")
-						print "Operation:"+ lines[0].split(",")[0].split(":")[2].split("=")[1]
-						print "Jobs:"+ op[2].split(" ")[2].split("=")[1].split(")")[0]
-						print "Blocksize:"+ lines[0].split(",")[1].split("=")[1].split("-")[0]
-						print "Iodepth:"+ lines[0].split(",")[3].split("=")[1]
-						print "IOPS:"+ op[3].split(",")[2].split("=")[1]
-						print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
-						print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
-						print "99.99 Latency:"+ op[12].split("=")[-1].split("[")[1][:-1]+" usec"
+						try:
+							print "\nSummary for container:%s"%id
+							cmd = "docker exec "+id+" cat /fio.out"
+							res = subprocess.check_output(cmd, shell=True)
+							print "\n---------FIO------------"
+							lines = res.split("\n")
+							op = res.split("Starting")[1].split("\n")
+							print "Operation:"+ lines[0].split(",")[0].split(":")[2].split("=")[1]
+							print "Jobs:"+ op[2].split(" ")[2].split("=")[1].split(")")[0]
+							print "Blocksize:"+ lines[0].split(",")[1].split("=")[1].split("-")[0]
+							print "Iodepth:"+ lines[0].split(",")[3].split("=")[1]
+							print "IOPS:"+ op[3].split(",")[2].split("=")[1]
+							print "Bandwidth:"+ op[3].split(",")[1].split("=")[1]
+							print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
+							print "99.99 Latency:"+ op[12].split("=")[-1].split("[")[1][:-1]+" usec"
 
-						cmd = "docker exec "+id+" cat /nvme.out"
-						res = subprocess.check_output(cmd, shell=True)
-						print "\n--------NVME------------"
-						lines = res.split("\n")
-						print "Temperature:"+ lines[2].split(":")[1]
-						print "Available Spare:" + lines[3].split(":")[1]
-						print "Percent Used:" + lines[5].split(":")[1]
-						print "Data Units Read:"+ lines[6].split(":")[1]
-						print "Data Units Written:"+ lines[7].split(":")[1]
+							cmd = "docker exec "+id+" cat /nvme.out"
+							res = subprocess.check_output(cmd, shell=True)
+							print "\n--------NVME------------"
+							lines = res.split("\n")
+							print "Temperature:"+ lines[2].split(":")[1]
+							print "Available Spare:" + lines[3].split(":")[1]
+							print "Percent Used:" + lines[5].split(":")[1]
+							print "Data Units Read:"+ lines[6].split(":")[1]
+							print "Data Units Written:"+ lines[7].split(":")[1]
+						except Exception:
+							print "\n[ERROR] NVMe-cli does not work on HDD"
+							pass
 
 			except Exception, e:
 				print "\n[ERROR] Something went wrong. Try again!"

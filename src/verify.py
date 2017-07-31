@@ -118,9 +118,24 @@ class Verify:
 				print "\n"
 				location = raw_input("\t-Enter disk name to benchmark:")
 				if "nvme" not in location:
-					print "\t-[WARNING] NVMe-Cli does not work on HDD" 
+					inp = raw_input("\t-[WARNING] NVMe-Cli does not work on HDD. Continue? (y|N):")
+					if inp.lower() != "y".lower():
+						exit(1)
+				
+				# if file does not exist
+				if not os.path.exists(location):
+					print "\n\t-[ERROR] No such file or directory"
+					op = raw_input("\t-Press \"N\" to quit, any key to try again:")
+					if op =="N" or op=="n":
+						print "\t-Exiting! Bye!"
+						exit(1)
+					else:
+						continue
+
+				# if the file is not a block device
+
 				if stat.S_ISBLK(os.stat(location).st_mode): 
-				#os.path.exists(location):# and (location != ".." or location != "."):
+				
 					
 					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers\n"
 					containerIds = []
@@ -134,9 +149,9 @@ class Verify:
 						#if res == "":
 						#	break
 					return containerIds, location
-				else:
+				else:    
 					print "\n\t-[ERROR] Not a block device"
-					op = raw_input("\t-Press \"N\" to quit, any key to continue:")
+					op = raw_input("\t-Press \"N\" to quit, any key to try again:")
 					if op =="N" or op=="n":
 							print "\t-Exiting! Bye!"
 							exit(1)
