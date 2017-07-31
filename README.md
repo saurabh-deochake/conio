@@ -6,7 +6,7 @@ Copyright Intel Corporation. 2017.
 #### Releases
 * [Conio v1.0.0](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.0)
 * [Conio v1.0.1](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.1)
-
+* [Conio v1.0.2](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.2)
 
 #### Current status    
 beta testing       
