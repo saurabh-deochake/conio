@@ -22,8 +22,8 @@ from setuptools import setup
 
 setup(
 	name='Conio',
-	version='1.0',
-	description='A lightweight utility for containerized benchmarking of  NVMe SSD using FIO and NVMe-Cli',
+	version='1.0.2',
+	description='Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage',
 	author='Saurabh Deochake',
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',

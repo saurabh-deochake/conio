@@ -91,7 +91,7 @@ def create(num):
 @click.option('--tool',default='all',type=click.Choice(['fio','nvme','all']),
 				help='I/O benchmark tools to run: fio/nvme/all (both: default)')
 @click.option('--num', default=1,
-				help='Number of containers to spawn for benchmarking')
+				help='Number of containers to benchmark')
 @click.option('--thread',default="1",
 				help='Run jobs as threads')
 @click.option('--direct', default="1",
