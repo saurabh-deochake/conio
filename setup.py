@@ -20,14 +20,20 @@ Author: Saurabh Deochake, Intel Corporation
 
 from setuptools import setup
 
+def readme():
+    with open('README.md') as f:
+        return f.read()
+
 setup(
 	name='Conio',
 	version='1.0.2',
 	description='Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage',
+	long_description = readme(),
+	url = 'https://github.com/saurabh-deochake/conio',
 	author='Saurabh Deochake',
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',
-	py_modules=['conio'],
+	#py_modules=['conio'],
 	install_requires=['Click','configparser'],
 	entry_points='''
 		[console_scripts]
