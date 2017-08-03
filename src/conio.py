@@ -36,7 +36,7 @@ def conio():
 	Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage 
 	"""
 	if os.getuid() != 0:
-		print "\n[ERROR] Cannot run with non-root user. Aborting!"
+		print "[ERROR] Cannot run with non-root user. Aborting!"
 		exit(1)
 	pass
 ## -------------------------------------------------------------------------
@@ -48,7 +48,7 @@ def clean():
 	"""Stop and remove containers"""
  	try:
 		if os.getuid() != 0:
-			print "\n[ERROR] Cannot run with non-root user. Aborting!"
+			print "[ERROR] Cannot run with non-root user. Aborting!"
 			exit(1)
 		d = verify.Verify()
 		rt = Runtime()
@@ -70,7 +70,7 @@ def create(num):
 	"""Create and launch containers"""
 	try:
 		if os.getuid() != 0:
-			print "\n[ERROR] Cannot run with non-root user. Aborting!"
+			print "[ERROR] Cannot run with non-root user. Aborting!"
 			exit(1)
 
 		global flag
