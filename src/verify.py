@@ -167,7 +167,7 @@ class Verify:
 	# Clean up by removing containers
 	def cleanup(self, id):
 		try:
-			while(1):
+			
 				inp = raw_input("Remove container(s)? [y|N]:")
 				if inp == "y" or inp == "Y":
 					for id in id:
@@ -175,15 +175,36 @@ class Verify:
 						print "\t-[INFO] Removing container:%s"%id
 						cmd = "docker stop "+id+" && docker rm "+id
 						res = subprocess.check_output(cmd, shell=True)
-					return
+					exit(0)
 				else:
-					return
+					exit(0)
 		except Exception, e:
 			print "\n[ERROR] Something went wrong. Try again!"
 			print str(e)
 			exit(1)
 
+## ------------------------------------------------------------------------
 
+	# Clean up by container name or id
+	def cleanupSpecific(self, attr):
+		try:
+		
+				cmd = "docker ps | grep "+attr
+				if not subprocess.check_output(cmd, shell=True):
+					print "\nNo such running container: %s"%attr
+					exit(1)
+				else:
+					inp = raw_input("Remove container? [y|N]:")
+					if inp.lower() == 'y'.lower():
+						cmd = "docker stop "+attr+" && docker rm "+attr
+						print "\t- [INFO] Removing contaier:%s"%attr
+						res = subprocess.check_output(cmd, shell=True)
+						exit(0)
+					else:
+						exit(0)
+		except Exception, e:
+			print "\n[ERROR] No such running container: %s"%attr
+			exit(1)
 ## -------------------------------------------------------------------------
 
 	# if jobfile is mentioned, copy that to docker containers

@@ -50,7 +50,7 @@ def list():
 	try:
 		rt = Runtime()
 		data = rt.listContainers()
-		print "ID\t\tName"
+		print "\nCONTAINER ID\tNAMES"
 		print "--------------------------------------"
 		for key in data:
 			print key+"\t"+data[key]
@@ -64,11 +64,13 @@ def list():
 
 # Stop and remove containers
 @conio.command()
+@click.option('--name', help='Name of container to remove')
+@click.option('--id', help='ID of container to remove')
 @click.option('--num', help='Number of containers to remove')
 @click.option('--all', is_flag=True,
 				help='Stop and remove all containers')
 #@click.pass_context()
-def clean(num, all):
+def clean(name, id, num, all):
 	"""stop and remove containers"""
  	try:
 		if os.getuid() != 0:
@@ -80,30 +82,37 @@ def clean(num, all):
 			rt = Runtime()
 			ids = rt.getContainerID(10)
 			d.cleanup(ids)
-		else:
-			if num == None:
-				number = int(raw_input("How many containers do you want to remove?:"))
-				d = verify.Verify()
-				rt = Runtime()
-				ids = rt.getContainerID(10)
-				ids = ids[:number]
-				print "\n[INFO] Removing first %s container(s)"%number
-				d.cleanup(ids)
-					
-			elif num == '0':
-				print "\n[INFO] Nothing mentioned to clean"
-				pass
-			else:
+		elif num:
+			if num == '0':
+				print "\n[INFO] Nothing to clean"
+				exit(0)
+			else:		   
 				d = verify.Verify()
 				rt = Runtime()
 				ids = rt.getContainerID(10)
 				ids = ids[:int(num)]
-				print "\n[INFO] Removing first %s container(s)"%num
+				#print "\n[INFO] Removing first %s container(s)"%num
 				d.cleanup(ids)
-		'''
-		rt = Runtime()
-		print rt.getContainerID(10)[:2]
-		'''
+					
+		if name:
+			d = verify.Verify()
+			d.cleanupSpecific(name)
+		if id:
+			d = verify.Verify()
+			d.cleanupSpecific(id)
+		else:
+				num = raw_input("How many containers do you want to remove:")
+				if num == '0':
+					print "\n[INFO] Nothing to clean"
+					pass
+				else:
+					d = verify.Verify()
+					rt = Runtime()
+					ids = rt.getContainerID(10)
+					ids = ids[:int(num)]
+					#print "\n[INFO] Removing first %s container(s)"%num
+					d.cleanup(ids)
+		
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)
