@@ -62,8 +62,7 @@ class Runtime:
 					
 
 			except Exception, e:
-					print "\n[ERROR] Something went wrong. Try again!"
-					print str(e)
+					print "\nNo running container found. Aborting!"
 					exit(1)
 
 ## -------------------------------------------------------------------------
