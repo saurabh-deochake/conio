@@ -15,6 +15,7 @@ beta testing
 * Launch specified number of Docker containers automatically     
 * Supports FIO benchmarking    
 * Support for NVMe-Cli Master for NVMe storage      
+* Extend with other tools by simple modification to source code and Dockerfile
 
 #### Usage
 * Get Conio source from GitHub    
@@ -27,17 +28,18 @@ beta testing
 # conio --help
 Usage: conio [OPTIONS] COMMAND [ARGS]...
 
-  Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
-  Copyright Intel Corporation. 2017.
+  Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based
+  cloud storage
 
 Options:
   --version  Show the version and exit.
   --help     Show this message and exit.
 
 Commands:
-  clean   Stop and remove containers
-  create  Create and launch containers
-  run     Run tools inside containers
+  clean   stop and remove containers
+  create  create and launch containers
+  list    list all available containers
+  run     run tools inside containers
 ```
 
 ```    
