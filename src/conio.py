@@ -43,17 +43,46 @@ def conio():
 
 # Stop and remove containers
 @conio.command()
+@click.option('--num', help='Number of containers to remove')
+@click.option('--all', is_flag=True,
+				help='Stop and remove all containers')
 #@click.pass_context()
-def clean():
+def clean(num, all):
 	"""Stop and remove containers"""
  	try:
 		if os.getuid() != 0:
 			print "[ERROR] Cannot run with non-root user. Aborting!"
 			exit(1)
-		d = verify.Verify()
+		
+		if all:
+			d = verify.Verify()
+			rt = Runtime()
+			ids = rt.getContainerID(10)
+			d.cleanup(ids)
+		else:
+			if num == None:
+				number = int(raw_input("How many containers do you want to remove?:"))
+				d = verify.Verify()
+				rt = Runtime()
+				ids = rt.getContainerID(10)
+				ids = ids[:number]
+				print "\n[INFO] Removing first %s container(s)"%number
+				d.cleanup(ids)
+					
+			elif num == '0':
+				print "\n[INFO] Nothing mentioned to clean"
+				pass
+			else:
+				d = verify.Verify()
+				rt = Runtime()
+				ids = rt.getContainerID(10)
+				ids = ids[:int(num)]
+				print "\n[INFO] Removing first %s container(s)"%num
+				d.cleanup(ids)
+		'''
 		rt = Runtime()
-		ids = rt.getContainerID(10)
-		d.cleanup(ids)
+		print rt.getContainerID(10)[:2]
+		'''
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)

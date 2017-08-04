@@ -168,7 +168,7 @@ class Verify:
 	def cleanup(self, id):
 		try:
 			while(1):
-				inp = raw_input("\nCleanup the environment? [y|N]:")
+				inp = raw_input("Remove container(s)? [y|N]:")
 				if inp == "y" or inp == "Y":
 					for id in id:
 						#remove containers by docker stop and docker rm
