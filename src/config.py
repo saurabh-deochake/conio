@@ -16,6 +16,9 @@ Author: Saurabh Deochake, Intel Corporation
 
 ## File which stores all global variables
 
+## --NOTE--: Please leave a space after you define your variable. 
+## Failure to do so may cause in misbehavior. Proceed with caution!
+
 # Docker commands
 DOCKER_PS = "docker ps "
 DOCKER_PS_GREP = "docker ps | grep "
