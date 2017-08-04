@@ -14,4 +14,33 @@ specific language governing permissions and limitations under the License.
 Author: Saurabh Deochake, Intel Corporation
 """
 
-DOCKER_PS = "docker ps"
+## File which stores all global variables
+
+# Docker commands
+DOCKER_PS = "docker ps "
+DOCKER_PS_GREP = "docker ps | grep "
+DOCKER_EXEC = "docker exec "
+DOCKER_RUN = "docker run "
+DOCKER_STOP = "docker stop "
+DOCKER_RM = "docker rm "
+DOCKER_CP = "docker cp "
+
+# System commands
+RPM_GREP = "rpm -qa | grep "
+PS_GREP = "ps -ef | grep "
+LSBLK_GREP_DISK = "lsblk | grep disk"
+
+# Tools
+FIO = "fio "
+NVME = "nvme "
+FIO_OUT = "/fio.out "
+NVME_OUT = "/nvme.out "
+
+## Other
+
+# Mount point inside containers
+CONT_MOUNT = "/dev/xvda" ## CAUTION: Setting it to /dev/nvme0n1 doesn't work
+
+# Docker Image
+DOCKER_IMAGE_NAME = "saurabhd04/docker_fio"
+

@@ -22,6 +22,7 @@ import verify as verify
 import click 
 import os
 
+from config import *
 from runtime import Runtime
 from ConfigParser import RawConfigParser
 
@@ -58,7 +59,6 @@ def list():
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)
 		exit(1)
-
 
 ## -------------------------------------------------------------------------
 
@@ -246,13 +246,13 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 							else:
 								tools = 2
 								fioParams = None
-								nvmeParams = "smart-log /dev/xvda"
+								nvmeParams = "smart-log "+CONT_MOUNT
 								rt.runTool(tool, ids,fioParams,nvmeParams)
 						else:
 							tools = 1 if flag else 3
 							#tools = 3
 							fioParams = []
-							nvmeParams = "smart-log /dev/xvda"
+							nvmeParams = "smart-log "+CONT_MOUNT
 							for each_section in parser.sections():
 								param = ""
 								for (each_key, each_val) in parser.items(each_section):
@@ -303,7 +303,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						d.copyToDocker(ids,path)
 						fioParams= "/"+os.path.basename(jobfile)
 				else:
-					fioParams = "--filename=/dev/xvda"+" --name="+name+" --thread="+thread + \
+					fioParams = "--filename="+CONT_MOUNT+" --name="+name+" --thread="+thread + \
 					" --direct="+direct+" --group_reporting="+group_reporting+ \
 					" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 					" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
@@ -320,7 +320,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				else:
 					tools = 2
 					fioParams = None
-					nvmeParams = "smart-log /dev/xvda"
+					nvmeParams = "smart-log "+CONT_MOUNT
 					rt.runTool(tools, ids,fioParams,nvmeParams)
 			# fio and nvme-cli
 			else:
@@ -335,16 +335,17 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						fioParams = "/"+os.path.basename(jobfile)
 				else:
 					# gather all parameters, if not mentioned then take default
-					fioParams = "--filename=/dev/xvda "+ "--name="+name+" --thread="+thread + \
+					fioParams = "--filename="+CONT_MOUNT+ " --name="+name+" --thread="+thread + \
 						" --direct="+direct+" --group_reporting="+group_reporting+ \
 						" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
 						" --time_based="+time_based+" --cpus_allowed_policy="+cpus_allowed_policy+ \
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
-				nvmeParams = "smart-log /dev/xvda"
+				nvmeParams = "smart-log "+CONT_MOUNT
 				rt.runTool(tools, ids, fioParams, nvmeParams)
 
 		# stop and remove containers
+		print "\n"
 		d.cleanup(ids)
 		#clean(ids)
 	

@@ -20,6 +20,8 @@ import os
 import subprocess
 import click
 
+from config import *
+
 class Runtime:
 		def __init__(self):
 			pass
@@ -30,7 +32,7 @@ class Runtime:
 			try:
 				containerIDs = []
 				# check if docker container with specific image is running
-				res = subprocess.check_output("docker ps | grep docker_fio", \
+				res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME, \
 												shell=True)
 				#gather ids for all containers
 				for cont in res.split("\n"):
@@ -48,7 +50,7 @@ class Runtime:
 		# Get details of containers running
 		def listContainers(self):
 			try:
-				res = subprocess.check_output("docker ps | grep docker_fio",\
+				res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME,\
 												shell=True)
 				#gather all containers
 				data = {}
@@ -73,13 +75,13 @@ class Runtime:
 				if type(fioParams) is list:
 					print "\nNow running Fio and NVMe-CLI inside containers..."
 					fio = " bash -c \"fio "
-					nvme = " & nvme "+nvmeParams+" > /nvme.out\" & "
+					nvme = " & nvme "+nvmeParams+" > "+NVME_OUT+"\" & "
 					cmd = ""
 
 					#print fioParams
 					for id, param in zip(containerIDs,fioParams):
 						print "\t-Inside container:%s"%id
-						cmd += "docker exec "+id+ fio+" --name=test "+param+" --output=/fio.out"+nvme
+						cmd += DOCKER_EXEC+" "+id+ fio+" --name=test "+param+" --output="+FIO_OUT+nvme
 					
 					res = subprocess.check_output(cmd, shell=True)
 				
@@ -88,11 +90,11 @@ class Runtime:
 					#if tool is fio tool=1
 					if tool == 1:
 						print "Now running Fio inside containers..."
-						fio = " fio "+fioParams+" --output=/fio.out &"
+						fio = " fio "+fioParams+" --output="+FIO_OUT+" &"
 						cmd = ""
 						for id in containerIDs:
 							print "\t-Inside container:%s"%id
-							cmd += "docker exec "+id+fio
+							cmd += DOCKER_EXEC+id+fio
 					
 						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
@@ -100,22 +102,22 @@ class Runtime:
 					# if tool is nvme tool=2
 					elif tool == 2:
 						print "Now running NVMe-CLI inside containers..."
-						nvme = " bash -c \" nvme "+nvmeParams+" > /nvme.out\" & "
+						nvme = " bash -c \" nvme "+nvmeParams+" > "+NVME_OUT+"\" & "
 						cmd = ""
 						for id in containerIDs:
 							#print "\t-Inside container:%s"%id
-							cmd += "docker exec "+id+nvme
+							cmd += DOCKER_EXEC+id+nvme
 						res = subprocess.check_output(cmd, shell=True)
 						print res
 					else:
 						## Run both here parallel
 						print "Now running Fio and NVMe-CLI inside containers..."
-						fio = " bash -c \"fio "+fioParams+" --output=/fio.out &"
-						nvme = " nvme "+nvmeParams+" > /nvme.out\" &"
+						fio = " bash -c \"fio "+fioParams+" --output="+FIO_OUT+" &"
+						nvme = " nvme "+nvmeParams+" > "+NVME_OUT+"\" &"
 						cmd = ""
 						for id in containerIDs:
 							print "\t-Inside container:%s"%id
-							cmd += "docker exec "+id+fio+nvme
+							cmd += DOCKER_EXEC+id+fio+nvme
 						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
 								
@@ -134,7 +136,7 @@ class Runtime:
 				if tool == 1:
 					for id in containerIDs:
 						print "\nSummary for container:%s"%id
-						cmd = "docker exec "+id+" cat /fio.out"
+						cmd = DOCKER_EXEC+id+" cat "+FIO_OUT
 						res = subprocess.check_output(cmd, shell=True)
 						lines = res.split("\n")
 						op = res.split("Starting")[1].split("\n")
@@ -151,7 +153,7 @@ class Runtime:
 				if tool == 2:
 					for id in containerIDs:
 						print "\nSummary for container:%s"%id
-						cmd = "docker exec "+id+" cat /nvme.out"
+						cmd = DOCKER_EXEC+id+" cat "+NVME_OUT
 						res = subprocess.check_output(cmd, shell=True)
 						lines = res.split("\n")
 						print "Temperature:"+ lines[2].split(":")[1]
@@ -163,7 +165,7 @@ class Runtime:
 					for id in containerIDs:
 						try:
 							print "\nSummary for container:%s"%id
-							cmd = "docker exec "+id+" cat /fio.out"
+							cmd = DOCKER_EXEC+id+" cat "+FIO_OUT
 							res = subprocess.check_output(cmd, shell=True)
 							print "\n---------FIO------------"
 							lines = res.split("\n")
@@ -177,7 +179,7 @@ class Runtime:
 							print "Avg Latency:"+ op[5].split(",")[2].split("=")[1]+" usec"
 							print "99.99 Latency:"+ op[12].split("=")[-1].split("[")[1][:-1]+" usec"
 
-							cmd = "docker exec "+id+" cat /nvme.out"
+							cmd = "docker exec "+id+" cat "+NVME_OUT
 							res = subprocess.check_output(cmd, shell=True)
 							print "\n--------NVME------------"
 							lines = res.split("\n")

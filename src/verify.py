@@ -24,6 +24,8 @@ import stat
 import subprocess
 import sys; sys.dont_write_bytecode = True
 
+from config import *
+
 class Verify:
 	def __init__(self):
 		# check environment variable
@@ -51,7 +53,7 @@ class Verify:
 	def verifyDocker(self):
 		try:
 			print "\nVerifying Docker enviroment..."
-			res = subprocess.check_output("rpm -qa | grep docker", shell=True)
+			res = subprocess.check_output(RPM_GREP+" docker", shell=True)
 			if res == "":
 					print "\t-[ERROR] Is Docker installed? Please install Docker..."
 					return False
@@ -66,7 +68,7 @@ class Verify:
 	def verifyDockerdRunning(self):
 		try:
 			#print "\t...Verifying Docker daemon"
-			res = subprocess.check_output("ps -ef | grep dockerd", shell=True)
+			res = subprocess.check_output(PS_GREP+" dockerd", shell=True)
 			if "/usr/bin/dockerd" in res:
 					return True
 			else:
@@ -82,7 +84,8 @@ class Verify:
 	def verifyFioContainer(self):
 		try:
 			#print "\t...Verifying if benchmark container is set up"
-			res = subprocess.check_output("docker ps | grep docker_fio | wc -l", shell=True)
+			res = subprocess.check_output(DOCKER_PS_GREP+DOCKER_IMAGE_NAME+"| wc -l",\
+							shell=True)
 			# return the output 	
 			return res
 		except Exception, e:
@@ -93,7 +96,7 @@ class Verify:
 				 else:
 						 print "\t-[ERROR] Cannot run without a container."
 						 print "\t-To create a container manually, run as root:"
-						 print "\t-\"docker run --cap-add=SYS_ADMIN -d --device=/dev/nvme0n1:/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null\""
+						 print "\t-\"docker run --cap-add=SYS_ADMIN -d --device=<disk>:/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null\""
 						# print "\t...Exiting! Bye!"
 						 exit(1) 
 				
@@ -107,7 +110,7 @@ class Verify:
 			while(1):
 				# Takes only valid disk file
 				print "\t-Where is your NVMe disk located?"
-				res = subprocess.check_output("lsblk | grep disk",shell=True)
+				res = subprocess.check_output(LSBLK_GREP_DISK,shell=True)
 				print "\t",
 				lines = res.split("\n")
 				# display all available disks
@@ -141,7 +144,7 @@ class Verify:
 					containerIds = []
 					for i in range(num):
 						# spawn containers and mount nvme disk as volume
-						cmd = "docker run --cap-add=SYS_ADMIN -d --device="+location+":/dev/xvda:rw saurabhd04/docker_fio tail -f /dev/null"	
+						cmd = DOCKER_RUN+ " --cap-add=SYS_ADMIN -d --device="+location+":"+CONT_MOUNT+":rw "+ DOCKER_IMAGE_NAME+" tail -f /dev/null"	
 						res = subprocess.check_output(cmd, shell=True)
 						containerIds.append(res)
 						print "\t-Benchmark container #%s is set up"%(i+1)
@@ -173,7 +176,7 @@ class Verify:
 					for id in id:
 						#remove containers by docker stop and docker rm
 						print "\t-[INFO] Removing container:%s"%id
-						cmd = "docker stop "+id+" && docker rm "+id
+						cmd = DOCKER_STOP+id+" && "+DOCKER_RM+id
 						res = subprocess.check_output(cmd, shell=True)
 					exit(0)
 				else:
@@ -189,14 +192,14 @@ class Verify:
 	def cleanupSpecific(self, attr):
 		try:
 		
-				cmd = "docker ps | grep "+attr
+				cmd = DOCKER_PS_GREP+attr
 				if not subprocess.check_output(cmd, shell=True):
 					print "\nNo such running container: %s"%attr
 					exit(1)
 				else:
 					inp = raw_input("Remove container? [y|N]:")
 					if inp.lower() == 'y'.lower():
-						cmd = "docker stop "+attr+" && docker rm "+attr
+						cmd = DOCKER_STOP+attr+" && "+DOCKER_RM+attr
 						print "\t- [INFO] Removing contaier:%s"%attr
 						res = subprocess.check_output(cmd, shell=True)
 						exit(0)
@@ -212,7 +215,7 @@ class Verify:
 		try:
 				for id in ids:
 					#print "Copying jobfile to containers..."
-					cmd = "docker cp "+jobfile+" "+id+":/"
+					cmd = DOCKER_CP+jobfile+" "+id+":/"
 					res = subprocess.check_output(cmd, shell=True)
 		except Exception, e:
 				print "\n[ERROR] Something went wrong. Try again!"
@@ -225,7 +228,7 @@ class Verify:
 		try:
 			containerIDs = []
 			# check if docker container with specific image is running
-			res = subprocess.check_output("docker ps | grep docker_fio",shell=True)
+			res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME,shell=True)
 			#gather ids for all containers
 			for cont in res.split("\n"):
 				id = cont.split(" ")[0]
