@@ -45,6 +45,29 @@ class Runtime:
 
 ## -------------------------------------------------------------------------
 
+		# Get details of containers running
+		def listContainers(self):
+			try:
+				res = subprocess.check_output("docker ps | grep docker_fio",\
+												shell=True)
+				#gather all containers
+				data = {}
+				for containers in res.split("\n"):
+					cont = containers.split()
+					if not cont:
+						break
+					data[cont[0]] = cont[-1]
+					
+				return data
+					
+
+			except Exception, e:
+					print "\n[ERROR] Something went wrong. Try again!"
+					print str(e)
+					exit(1)
+
+## -------------------------------------------------------------------------
+
 		# run Fio based on parameters and number of containers
 		def runTool(self,tool, containerIDs, fioParams, nvmeParams):
 			try:

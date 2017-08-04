@@ -41,6 +41,27 @@ def conio():
 	pass
 ## -------------------------------------------------------------------------
 
+# List all containers
+@conio.command()
+def list():
+	""" 
+	list all available containers
+	"""
+	try:
+		rt = Runtime()
+		data = rt.listContainers()
+		print "ID\t\tName"
+		print "--------------------------------------"
+		for key in data:
+			print key+"\t"+data[key]
+	except Exception, e:
+		print "\n[ERROR] Something went wrong. Try again!"
+		print str(e)
+		exit(1)
+
+
+## -------------------------------------------------------------------------
+
 # Stop and remove containers
 @conio.command()
 @click.option('--num', help='Number of containers to remove')
@@ -48,7 +69,7 @@ def conio():
 				help='Stop and remove all containers')
 #@click.pass_context()
 def clean(num, all):
-	"""Stop and remove containers"""
+	"""stop and remove containers"""
  	try:
 		if os.getuid() != 0:
 			print "[ERROR] Cannot run with non-root user. Aborting!"
@@ -96,7 +117,7 @@ def clean(num, all):
 				help='Number of containers to spawn for benchmarking')
 
 def create(num):
-	"""Create and launch containers"""
+	"""create and launch containers"""
 	try:
 		if os.getuid() != 0:
 			print "[ERROR] Cannot run with non-root user. Aborting!"
@@ -171,7 +192,7 @@ def create(num):
 def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
 				numjobs,name,jobfile,config,mixed_jobs):
-	"""Run tools inside containers"""
+	"""run tools inside containers"""
 	try:
 		global flag
 		if os.getuid() != 0:
