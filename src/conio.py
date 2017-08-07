@@ -218,9 +218,9 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				exit(1)
 			else:
 				if os.path.exists(config) and os.path.isfile(config):
-					parser = RawConfigParser()
-					parser.read(config)
-					if num == len(parser.sections()):
+						parser = RawConfigParser()
+						parser.read(config)
+						num = len(parser.sections())
 						#global flag
 						# check if Docker is set up properly
 						d = verify.Verify()
@@ -260,14 +260,8 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 								for (each_key, each_val) in parser.items(each_section):
 									param += " --"+each_key+"="+each_val
 								fioParams.append(param)
-							rt.runTool(tools, ids, fioParams, nvmeParams)				
-							#print fioParams
-					else:
-						print "\n[ERROR] Number of containers mentioned does not match that of in config file"
-						print "\nAborting!"
-						exit(1)
-						
-						
+							rt.runTool(tools, ids, None, None,fioParams, nvmeParams)				
+							#### CHANGE runTool ACCORDING TO PRESENCE OF OFFSET ####	
 						
 	
 				else:
