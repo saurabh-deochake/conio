@@ -109,7 +109,7 @@ class Verify:
 			print "\nSetting up %s container(s) for benchmarking..."%num
 			while(1):
 				# Takes only valid disk file
-				print "\t-Where is your NVMe disk located?"
+				print "\t-Where is your disk located?"
 				res = subprocess.check_output(LSBLK_GREP_DISK,shell=True)
 				print "\t",
 				lines = res.split("\n")
@@ -140,7 +140,7 @@ class Verify:
 				if stat.S_ISBLK(os.stat(location).st_mode): 
 				
 					
-					print "\t-[INFO] NVMe disk will be mounted at /dev/xvda inside containers\n"
+					print "\t-[INFO] The disk will be mounted at /dev/xvda inside containers\n"
 					containerIds = []
 					for i in range(num):
 						# spawn containers and mount nvme disk as volume

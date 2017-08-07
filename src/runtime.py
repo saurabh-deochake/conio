@@ -19,7 +19,7 @@ Author: Saurabh Deochake, Intel Corporation
 import os
 import subprocess
 import click
-import math
+
 
 from config import *
 
