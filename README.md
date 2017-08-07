@@ -153,7 +153,7 @@ Cleanup the environment? [y|N]:y
         -[INFO] Removing container:90875dc7b1ea
 ```
 ### Contributing
-If you are interested in becoming a contributer to this project, then please fork the project. As this project is in alpha testing, some things may break. Please create an issue on the repo if you find something broken. 
+If you are interested in becoming a contributer to this project, then please fork the project. As this project is in beta testing, some things may break. Please create an issue on the repo if you find something broken. 
 
 ### License
 The tool is made avaiable under Apache 2.0 license. Please read the terms of license located in LICENSE file.
