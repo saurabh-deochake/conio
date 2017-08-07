@@ -19,6 +19,7 @@ Author: Saurabh Deochake, Intel Corporation
 import os
 import subprocess
 import click
+import math
 
 from config import *
 
@@ -70,8 +71,9 @@ class Runtime:
 ## -------------------------------------------------------------------------
 
 		# run Fio based on parameters and number of containers
-		def runTool(self,tool, containerIDs, fioParams, nvmeParams):
+		def runTool(self,tool, containerIDs,offset, size, fioParams, nvmeParams):
 			try:
+				
 				if type(fioParams) is list:
 					print "\nNow running Fio and NVMe-CLI inside containers..."
 					fio = " bash -c \"fio "
@@ -89,14 +91,30 @@ class Runtime:
 					print "\nGo grab some coffee while I finish benchmarking your containers!\n"
 					#if tool is fio tool=1
 					if tool == 1:
-						print "Now running Fio inside containers..."
-						fio = " fio "+fioParams+" --output="+FIO_OUT+" &"
+						
+
+						fio = " fio "+fioParams+" --output="+FIO_OUT
 						cmd = ""
-						for id in containerIDs:
-							print "\t-Inside container:%s"%id
-							cmd += DOCKER_EXEC+id+fio
+						if offset is not None and size is not None:
+							offset = int(offset) 
+							
+							if offset%512:
+								offset -= (offset%512)
+								print "[WARNING] Rounding the offset down to nearest 512"
+							size = self.convertToBytes(size)
+							print "Now running Fio inside containers..."
+							for id in containerIDs:
+								print "\t-Inside container:%s"%id
+								cmd += DOCKER_EXEC+id+fio+" --offset="+str(offset)+" & "
+								offset += size 
+								
+						else:
+							print "Now running Fio inside containers..."
+							for id in containerIDs:
+								print "\t-Inside container:%s"%id
+								cmd += DOCKER_EXEC+id+fio+" & "
 					
-						#print cmd
+						
 						res = subprocess.check_output(cmd, shell=True)
 							
 					# if tool is nvme tool=2
@@ -111,13 +129,27 @@ class Runtime:
 						print res
 					else:
 						## Run both here parallel
-						print "Now running Fio and NVMe-CLI inside containers..."
-						fio = " bash -c \"fio "+fioParams+" --output="+FIO_OUT+" &"
+						fio = " bash -c \"fio "+fioParams+" --output="+FIO_OUT
 						nvme = " nvme "+nvmeParams+" > "+NVME_OUT+"\" &"
 						cmd = ""
-						for id in containerIDs:
-							print "\t-Inside container:%s"%id
-							cmd += DOCKER_EXEC+id+fio+nvme
+						if offset is not None and size is not None:
+							offset = int(offset)
+							if offset%512: 
+								offset -= offset%512
+								print "[WARNING] Rounding the offset down to nearest 512"
+							size = self.convertToBytes(size)
+							
+							print "Now running Fio and NVMe-CLI inside containers..."
+							for id in containerIDs:
+								print "\t-Inside container:%s"%id
+								cmd += DOCKER_EXEC+id+fio+" --offset="+str(offset)+" & "+nvme
+								offset += size
+						else:
+
+							print "Now running Fio and NVMe-CLI inside containers..."
+							for id in containerIDs:
+								print "\t-Inside container:%s"%id
+								cmd += DOCKER_EXEC+id+fio+" & "+nvme
 						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
 								
@@ -196,3 +228,42 @@ class Runtime:
 				print "\n[ERROR] Something went wrong. Try again!"
 				print "\nNVMe-CLI only works on NVMe Solid State Drives"
 				exit(1)
+
+## -------------------------------------------------------------------------
+		
+		# If offset is mentioned, convert KB/MB/GB to B
+		def convertToBytes(self, size):
+			try:
+				size = size.lower()
+				# KB or KiB or kb
+				if size.find("k".lower()) != -1:
+					index = size.find("k".lower())
+					sizeInNumber = int(size[:index])
+					return sizeInNumber << 10
+				# sizeInNumber * math.pow(10,3)
+				# MB or MiB or mb
+				if size.find("m".lower()) != -1:
+					index = size.find("m".lower())
+					sizeInNumber = int(size[:index])
+					return sizeInNumber * math.pow(10,6)
+				# GB or GiB or gb
+				if size.find("g".lower()) != -1:
+					index = size.find("g".lower())
+					sizeInNumber = int(size[:index])
+					return sizeInNumber << 30 
+					#sizeInNumber * math.pow(10, 9)
+				# TB or TiB or tb
+			   	if size.find("t".lower()) != -1:
+					index = size.find("t".lower())
+					sizeInNumber = int(size[:index])
+					return sizeInNumber << 40 
+					#* math.pow(10, 12)
+			  	# B or b
+			  	if size.find("b".lower()) != -1:
+					index = size.find("b".lower())
+					return int(size[:index])
+			except Exception, e:
+				print "\n[ERROR] Failed to get size in bytes"
+				print str(e)
+				exit(1)
+

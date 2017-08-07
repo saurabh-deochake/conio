@@ -194,13 +194,15 @@ def create(num):
 @click.option('--mixed_jobs', is_flag=True,
 				help='Set this if you want to run different jobs on containers. (A config file is required)')
 
+@click.option('--offset',
+				help='Offset in the file to start I/O. Data before the offset will not be touched. Mention size and offset to avoid containers reading over each other')
 
 ## ------------------------------------------------------------------------
 
 # command function, handles all parameters
 def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
-				numjobs,name,jobfile,config,mixed_jobs):
+				numjobs,name,jobfile,config,mixed_jobs,offset):
 	"""run tools inside containers"""
 	try:
 		global flag
@@ -303,6 +305,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						d.copyToDocker(ids,path)
 						fioParams= "/"+os.path.basename(jobfile)
 				else:
+
 					fioParams = "--filename="+CONT_MOUNT+" --name="+name+" --thread="+thread + \
 					" --direct="+direct+" --group_reporting="+group_reporting+ \
 					" --ioengine="+ioengine+" --size="+size+"  --do_verify="+do_verify+ \
@@ -310,7 +313,11 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 					" --runtime="+runtime+" --numjobs="+numjobs
 					# run the tool inside containers
-				rt.runTool(tools,ids, fioParams,nvmeParams)
+				
+				if offset is not None and size is not None:	
+					rt.runTool(tools,ids,offset,size,fioParams,nvmeParams)
+				else: 
+					rt.runTool(tools,ids,None,None,fioParams,nvmeParams)
 
 			# nvme-cli
 			elif tool.lower() == "nvme".lower():
@@ -342,8 +349,10 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						" --iodepth="+iodepth+" --rw="+rw+" --blocksize="+blocksize+ \
 						" --runtime="+runtime+" --numjobs="+numjobs
 				nvmeParams = "smart-log "+CONT_MOUNT
-				rt.runTool(tools, ids, fioParams, nvmeParams)
-
+				if offset is not None and size is not None:
+					rt.runTool(tools, ids,offset,size, fioParams, nvmeParams)
+				else:
+					rt.runTool(tools,ids,None,None,fioParams,nvmeParams)
 		# stop and remove containers
 		print "\n"
 		d.cleanup(ids)
