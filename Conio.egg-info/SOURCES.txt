@@ -1,3 +1,6 @@
+MANIFEST.in
+README.md
+setup.py
 Conio.egg-info/PKG-INFO
 Conio.egg-info/SOURCES.txt
 Conio.egg-info/dependency_links.txt

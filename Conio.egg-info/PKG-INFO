@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Conio
-Version: 1.0.2
+Version: 1.0.3
 Summary: Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage
 Home-page: https://github.com/saurabh-deochake/conio
 Author: Saurabh Deochake
@@ -12,9 +12,10 @@ Description: # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=
         Copyright Intel Corporation. 2017.
         
         #### Releases
-        * [Conio v1.0.0](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.0)
-        * [Conio v1.0.1](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.1)
+        * [Conio v1.0.3](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.3)
         * [Conio v1.0.2](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.2)
+        * [Conio v1.0.1](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.1)
+        * [Conio v1.0.0](https://github.com/saurabh-deochake/conio/releases/tag/v1.0.0)
         
         #### Current status    
         beta testing       
@@ -23,6 +24,7 @@ Description: # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=
         * Launch specified number of Docker containers automatically     
         * Supports FIO benchmarking    
         * Support for NVMe-Cli Master for NVMe storage      
+        * Extend with other tools by simple modification to source code and Dockerfile
         
         #### Usage
         * Get Conio source from GitHub    
@@ -35,17 +37,18 @@ Description: # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=
         # conio --help
         Usage: conio [OPTIONS] COMMAND [ARGS]...
         
-          Conio- A lightweight tool for containerized I/O benchmarking of NVMe SSDs
-          Copyright Intel Corporation. 2017.
+          Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based
+          cloud storage
         
         Options:
           --version  Show the version and exit.
           --help     Show this message and exit.
         
         Commands:
-          clean   Stop and remove containers
-          create  Create and launch containers
-          run     Run tools inside containers
+          clean   stop and remove containers
+          create  create and launch containers
+          list    list all available containers
+          run     run tools inside containers
         ```
         
         ```    
@@ -158,7 +161,7 @@ Description: # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=
                 -[INFO] Removing container:90875dc7b1ea
         ```
         ### Contributing
-        If you are interested in becoming a contributer to this project, then please fork the project. As this project is in alpha testing, some things may break. Please create an issue on the repo if you find something broken. 
+        If you are interested in becoming a contributer to this project, then please fork the project. As this project is in beta testing, some things may break. Please create an issue on the repo if you find something broken. 
         
         ### License
         The tool is made avaiable under Apache 2.0 license. Please read the terms of license located in LICENSE file.
