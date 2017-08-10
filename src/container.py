@@ -186,6 +186,59 @@ class Container:
 			print str(e)
 			exit(1)
 
+## --------------------------------------------------------------------------
+
+	# Stop containers for later use
+	def stopContainers(self, attr):
+		try:
+			if type(attr) is list:
+				inp = raw_input("Stop container(s)? [y|N]:")
+				if inp.lower() == "y".lower():
+					for id in attr:
+						# stop all containers
+						print "\t-[INFO] Stopping container:%s"%id
+						res = subprocess.check_output(DOCKER_STOP+id, shell=True)
+					exit(0)
+				else:
+					exit(0)
+			else:
+				print "\t-[INFO] Stopping container:%s"%attr
+				res = subprocess.check_output(DOCKER_STOP+attr, shell=True)
+		
+		except Exception, e:
+			print "\n[ERROR] Something went wrong. Try again!"
+			exit(1)
+
+## -------------------------------------------------------------------------
+
+	# Start already stopped containers
+	def startContainers(self, attr):
+		try:
+			if type(attr) is list:
+				for id in attr:
+					#start each container one by one
+					print "\t-[INFO] Starting container:%s"%id
+					res = subprocess.check_output(DOCKER_START+id, shell=True)
+				exit(0)
+			else:
+				print "\t-[INFO] Staring container:%s"%attr
+				res = subprocess.check_output(DOCKER_START+attr, shell=True)
+		except Exception, e:
+			print "\n[ERROR] Something went wrong. Try again!"
+			exit(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
