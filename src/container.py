@@ -167,10 +167,15 @@ class Container:
 			if running:
 				res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME,\
 												shell=True)
+				if not res:
+					print "\nNo running container found. Aborting"
+					exit(1)
 			if not running:
 				res = subprocess.check_output(DOCKER_PS_STOPPED+GREP+DOCKER_IMAGE_NAME,\
 												shell=True)
-
+				if not res:
+					print "\nNo container found. Aborting"
+					exit(1)
 			#gather all containers
 			data = {}
 			for containers in res.split("\n"):
@@ -182,8 +187,7 @@ class Container:
 			return data
 			
 		except Exception, e:
-			print "\nNo running container found. Aborting!"
-			print str(e)
+			print "\nNo running/stopped container found. Aborting!"
 			exit(1)
 
 ## --------------------------------------------------------------------------
