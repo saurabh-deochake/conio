@@ -202,7 +202,7 @@ class Container:
 				else:
 					exit(0)
 			else:
-				cmd = DOCKER_PS_ALL+GREP+attr
+				cmd = DOCKER_PS_ALL+GREP_EXACT+attr
 				if not subprocess.check_output(cmd, shell=True):
 					print "\nNo such container: %s"%attr
 					exit(1)
@@ -226,7 +226,7 @@ class Container:
 					res = subprocess.check_output(DOCKER_START+id, shell=True)
 				exit(0)
 			else:
-				cmd = DOCKER_PS_ALL+GREP+attr
+				cmd = DOCKER_PS_ALL+GREP_EXACT+attr
 				if not subprocess.check_output(cmd, shell=True):
 					print "\nNo such container: %s"%attr
 					exit(1)

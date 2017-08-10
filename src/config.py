@@ -35,6 +35,7 @@ DOCKER_START = "docker start "
 
 # System commands
 GREP = " | grep "
+GREP_EXACT = " | grep -x "
 RPM_GREP = "rpm -qa | grep "
 PS_GREP = "ps -ef | grep "
 LSBLK_GREP_DISK = "lsblk | grep disk"
