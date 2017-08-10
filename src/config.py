@@ -24,6 +24,7 @@ Author: Saurabh Deochake, Intel Corporation
 # Docker commands
 DOCKER_PS = "docker ps "
 DOCKER_PS_GREP = "docker ps | grep "
+DOCKER_PS_STOPPED = "docker ps -f \"status=exited\" "
 DOCKER_EXEC = "docker exec "
 DOCKER_RUN = "docker run "
 DOCKER_STOP = "docker stop "
@@ -31,6 +32,7 @@ DOCKER_RM = "docker rm "
 DOCKER_CP = "docker cp "
 
 # System commands
+GREP = " | grep "
 RPM_GREP = "rpm -qa | grep "
 PS_GREP = "ps -ef | grep "
 LSBLK_GREP_DISK = "lsblk | grep disk"

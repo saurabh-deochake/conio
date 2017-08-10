@@ -28,47 +28,6 @@ class Runtime:
 			pass
 ## --------------------------------------------------------------------------
 
-		# Get the IDs of containers running
-		def getContainerID(self, num):
-			try:
-				containerIDs = []
-				# check if docker container with specific image is running
-				res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME, \
-												shell=True)
-				#gather ids for all containers
-				for cont in res.split("\n"):
-						id = cont.split(" ")[0]
-						if id:
-								containerIDs.append(cont.split(" ")[0])
-				#print containerIDs
-				return containerIDs
-			except Exception, e:
-					print "\nNothing to clean. Aborting!"
-					exit(1)
-
-## -------------------------------------------------------------------------
-
-		# Get details of containers running
-		def listContainers(self):
-			try:
-				res = subprocess.check_output(DOCKER_PS_GREP+" "+DOCKER_IMAGE_NAME,\
-												shell=True)
-				#gather all containers
-				data = {}
-				for containers in res.split("\n"):
-					cont = containers.split()
-					if not cont:
-						break
-					data[cont[0]] = cont[-1]
-					
-				return data
-					
-
-			except Exception, e:
-					print "\nNo running container found. Aborting!"
-					exit(1)
-
-## -------------------------------------------------------------------------
 
 		# run Fio based on parameters and number of containers
 		def runTool(self,tool, containerIDs,offset, size, fioParams, nvmeParams):
