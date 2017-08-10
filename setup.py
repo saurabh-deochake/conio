@@ -25,15 +25,14 @@ with open('README.md') as f:
 	long_description = f.read()
 
 setup(
-	name='Conio',
-	version='1.0.3',
+	name='conio',
+	version='1.0.4',
 	description='Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage',
 	long_description = long_description,
 	url = 'https://github.com/saurabh-deochake/conio',
 	author='Saurabh Deochake',
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',
-	#py_modules=['conio'],
 	install_requires=['Click','configparser'],
 	entry_points='''
 		[console_scripts]

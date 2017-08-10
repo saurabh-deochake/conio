@@ -1,0 +1,8 @@
+MANIFEST.in
+README.md
+conio.egg-info/PKG-INFO
+conio.egg-info/SOURCES.txt
+conio.egg-info/dependency_links.txt
+conio.egg-info/entry_points.txt
+conio.egg-info/requires.txt
+conio.egg-info/top_level.txt

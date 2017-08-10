@@ -32,7 +32,7 @@ flag = 0
 
 ## --------------------------------------------------------------------------
 @click.group()
-@click.version_option(version='1.0.2')
+@click.version_option(version='1.0.4')
 def conio():
 	"""
 	Conio- A lightweight tool for containerized I/O benchmarking of NVMe-based cloud storage 
