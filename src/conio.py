@@ -45,14 +45,26 @@ def conio():
 
 # List all containers
 @conio.command()
-def list():
+@click.option('--running', is_flag=True,
+				help="list all running containers")
+@click.option('--stopped', is_flag=True,
+				help="list all stopped containers")
+def list(running, stopped):
 	""" 
 	list all available containers
 	"""
 	try:
 		c = Container()
-		running = 1 # list all running containers, 0 otherwise
-		data = c.listContainers(running)
+		if running:
+			print running
+			running_tag = 1 # list all running containers, 0 otherwise
+			data = c.listContainers(running_tag)
+		if stopped:
+			running_tag = 0
+			data = c.listContainers(running_tag)
+		else:
+			running_tag = 1
+			data = c.listContainers(running_tag)
 		print "\nCONTAINER ID\tNAMES"
 		print "--------------------------------------"
 		for key in data:
@@ -78,20 +90,14 @@ def stop(name, id, all):
 		if os.getuid() != 0:
 			print "[ERROR] Cannot run with non-root user. Aborting!"
 			exit(1)
-		
+		c = Container()
 		if all:
-			d = verify.Verify()
-			#rt = Runtime()
-			c = Container()
 			ids = c.getContainerID(10)
-			c.stopContainer(ids)
+			c.stopContainers(ids)
 		if name:
-			c = Container()
-			c.stopSpecific(name)
+			c.stopContainers(name)
 		if id:
-			d = verify.Verify()
-			c = Container()
-			c.stopSpecific(id)
+			c.stopContainers(id)
 
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
@@ -114,22 +120,16 @@ def start(name, id, all):
 		if os.getuid() != 0:
 			 print "[ERROR] Cannot run with non-root user. Aborting!"
 			 exit(1)
-		
+		c = Container()
 		if all:
-			d = verify.Verify()
+			running = 0
 			c = container.Container()
-			rt = Runtime()
-			ids = c.getContainerID(10)
-			c.startContainer(ids)
+			ids = c.listContainers(running).keys()
+			c.startContainers(ids)
 		if name:
-			d = verify.Verify()
-			c = container.Container()
-			c.startSpecific(name)
+			c.startContainers(name)
 		if id:
-			d = verify.Verify()
-			
-			c = container.Container()
-			c.startSpecific(id)
+			c.startContainers(id)
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		exit(1)

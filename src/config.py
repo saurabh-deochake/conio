@@ -30,6 +30,7 @@ DOCKER_RUN = "docker run "
 DOCKER_STOP = "docker stop "
 DOCKER_RM = "docker rm "
 DOCKER_CP = "docker cp "
+DOCKER_START = "docker start "
 
 # System commands
 GREP = " | grep "
