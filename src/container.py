@@ -202,11 +202,16 @@ class Container:
 				else:
 					exit(0)
 			else:
-				print "\t-[INFO] Stopping container:%s"%attr
-				res = subprocess.check_output(DOCKER_STOP+attr, shell=True)
+				cmd = DOCKER_PS_ALL+GREP+attr
+				if not subprocess.check_output(cmd, shell=True):
+					print "\nNo such container: %s"%attr
+					exit(1)
+				else:
+					print "\t-[INFO] Stopping container:%s"%attr
+					res = subprocess.check_output(DOCKER_STOP+attr, shell=True)
 		
 		except Exception, e:
-			print "\n[ERROR] Something went wrong. Try again!"
+			print "\n[ERROR] No such container found"
 			exit(1)
 
 ## -------------------------------------------------------------------------
@@ -221,10 +226,15 @@ class Container:
 					res = subprocess.check_output(DOCKER_START+id, shell=True)
 				exit(0)
 			else:
-				print "\t-[INFO] Staring container:%s"%attr
-				res = subprocess.check_output(DOCKER_START+attr, shell=True)
+				cmd = DOCKER_PS_ALL+GREP+attr
+				if not subprocess.check_output(cmd, shell=True):
+					print "\nNo such container: %s"%attr
+					exit(1)
+				else:	
+					print "\t-[INFO] Staring container:%s"%attr
+					res = subprocess.check_output(DOCKER_START+attr, shell=True)
 		except Exception, e:
-			print "\n[ERROR] Something went wrong. Try again!"
+			print "\n[ERROR] No such container found"
 			exit(1)
 
 

@@ -23,6 +23,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 # Docker commands
 DOCKER_PS = "docker ps "
+DOCKER_PS_ALL = "docker ps -a "
 DOCKER_PS_GREP = "docker ps | grep "
 DOCKER_PS_STOPPED = "docker ps -f \"status=exited\" "
 DOCKER_EXEC = "docker exec "

@@ -56,7 +56,6 @@ def list(running, stopped):
 	try:
 		c = Container()
 		if running:
-			print running
 			running_tag = 1 # list all running containers, 0 otherwise
 			data = c.listContainers(running_tag)
 		if stopped:
@@ -123,7 +122,7 @@ def start(name, id, all):
 		c = Container()
 		if all:
 			running = 0
-			c = container.Container()
+			c = Container()
 			ids = c.listContainers(running).keys()
 			c.startContainers(ids)
 		if name:
@@ -132,6 +131,7 @@ def start(name, id, all):
 			c.startContainers(id)
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
+		print str(e)
 		exit(1)
 
 
