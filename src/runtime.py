@@ -56,7 +56,8 @@ class Runtime:
 
 						fio = " fio "+fioParams+" --output="+FIO_OUT
 						cmd = ""
-						if offset is not None and size is not None:
+						
+						if offset is not None and size is not None and '%' not in size:
 							offset = int(offset) 
 							
 							if offset%512:
@@ -93,7 +94,8 @@ class Runtime:
 						fio = " bash -c \"fio "+fioParams+" --output="+FIO_OUT
 						nvme = " nvme "+nvmeParams+" > "+NVME_OUT+"\" &"
 						cmd = ""
-						if offset is not None and size is not None:
+						
+						if offset is not None and size is not None and '%' not in size:
 							offset = int(offset)
 							if offset%512: 
 								offset -= offset%512
@@ -207,7 +209,7 @@ class Runtime:
 				dwrite = []
 				graph = Pyasciigraph(line_length=80,min_graph_length=30,float_format='{0:,.2f}')
 				non_decimal = re.compile(r'[^\d.]+')
-				print "\t\t\t---Summary of benchmark results---"
+				print "\n\t\t     ---Summary of benchmark results---"
 				if tool == 1:
 					for id in containerIDs:
 						#print "\nSummary for container:%s"%id
@@ -233,7 +235,7 @@ class Runtime:
 						_99lat.append(_99lat_data)
 
 				
-					print "\nFIO:\n----"
+					print "\n\t\t\t\t--FIO--"
 					for line in graph.graph('IOPS',iops):
 						print line
 					print"\n"	
@@ -262,7 +264,7 @@ class Runtime:
 						dread.append(dread_data)
 						dwrite.append(dwrite_data)
 
-					print "\nNVMe-Cli:\n----------"
+					print "\n\t\t\t\t--NVMe-Cli--"
 					for line in graph.graph('Data Units Read',dread):
 						print line
 					print "\n"
@@ -309,7 +311,7 @@ class Runtime:
 
 				
 					# Now print the graph
-					print "\nFIO:\n----"
+					print "\n\t\t\t\t--FIO--"
 					for line in graph.graph('IOPS',iops):
 						print line
 					print"\n"
@@ -321,7 +323,7 @@ class Runtime:
 					print "\n"
 					for line in graph.graph('99.99% Latency (usec)',_99lat):
 						print line
-					print "\nNVMe-Cli:\n----------"
+					print "\n\t\t\t\t--NVMe-Cli--"
 					for line in graph.graph('Data Units Read',dread):
 						print line
 					print "\n"
