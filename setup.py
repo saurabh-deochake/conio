@@ -33,7 +33,7 @@ setup(
 	author='Saurabh Deochake',
 	author_email='saurabh.deochake@intel.com',
 	license='Apache License, Version 2.0',
-	install_requires=['Click','configparser'],
+	install_requires=['Click','configparser','ascii_graph'],
 	entry_points='''
 		[console_scripts]
 		conio=src.conio:conio

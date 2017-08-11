@@ -20,7 +20,7 @@ import os
 import subprocess
 import click
 
-
+from ascii_graph import Pyasciigraph
 from config import *
 
 class Runtime:
@@ -187,6 +187,21 @@ class Runtime:
 				print "\n[ERROR] Something went wrong. Try again!"
 				print "\nNVMe-CLI only works on NVMe Solid State Drives"
 				exit(1)
+
+## -------------------------------------------------------------------------
+
+	# Summarize in graphical form
+	def summarizeGraph(self, tool, containerIDs):
+		try:
+			pass
+
+
+
+		except Exception, e:
+			print "\n[ERROR] Something went wrong. Try again!"
+			print str(e)
+			exit(1)
+
 
 ## -------------------------------------------------------------------------
 		
