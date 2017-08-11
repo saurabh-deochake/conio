@@ -429,7 +429,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					rt.runTool(tools,ids,None,None,fioParams,nvmeParams,graph)
 		# stop and remove containers
 		print "\n"
-		c.cleanup(ids)
+		#c.cleanup(ids)
 		#clean(ids)
 	
 	except Exception, e:

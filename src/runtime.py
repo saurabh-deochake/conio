@@ -205,6 +205,7 @@ class Runtime:
 				_99lat = []
 				graph = Pyasciigraph(line_length=80,min_graph_length=30,float_format='{0:,.2f}')
 				non_decimal = re.compile(r'[^\d.]+')
+				print "\nSummary of containers:"
 				if tool == 1:
 					for id in containerIDs:
 						#print "\nSummary for container:%s"%id
@@ -242,7 +243,7 @@ class Runtime:
 				print "\n"
 				for line in graph.graph('99.99% Latency (usec)',_99lat):
 					print line
-				inp = raw_input("\nPress \"Y\" to read more:")
+				inp = raw_input("\nPress \"Y\" to read more or any key to quit:")
 				if inp.lower() == "y".lower():
 					self.summarize(tool, containerIDs)
 				else:
