@@ -254,7 +254,7 @@ class Runtime:
 				
 						info = "Temp="+lines[2].split(":")[1]+\
 							   " Avail Spare="+lines[3].split(":")[1]+\
-							   " Used:"+lines[5].split(":")[1]+"%"+\
+							   " Used:"+lines[5].split(":")[1]+\
 							   " id:"+id
 						dread_data = (info,int(lines[6].split(":")[1]))
 						dwrite_data = (info,int(lines[7].split(":")[1]))
@@ -265,10 +265,70 @@ class Runtime:
 					print "\nNVMe-Cli:\n----------"
 					for line in graph.graph('Data Units Read',dread):
 						print line
+					print "\n"
 					for line in graph.graph('Data Units Written',dwrite):
 						print line
 
+			
 
+				if tool == 3:
+					for id in containerIDs:
+						#print "\nSummary for container:%s"%id
+						cmd = DOCKER_EXEC+id+" cat "+FIO_OUT
+						res = subprocess.check_output(cmd, shell=True)
+						lines = res.split("\n")
+						op = res.split("Starting")[1].split("\n")
+						
+						info = lines[0].split(",")[0].split(":")[2].split("=")[1]+\
+						      	" bs="+\
+						      	lines[0].split(",")[1].split("=")[1].split("-")[0]+\
+								" Qd="+lines[0].split(",")[3].split("=")[1]+\
+								" jobs="+op[2].split(" ")[2].split("=")[1].split(")")[0]+\
+								" id="+id
+						iops_data = (info,int(op[3].split(",")[2].split("=")[1]))
+						bandwidth_data = (info, float(non_decimal.sub('',op[3].split(",")[1].split("=")[1]))/1000)
+						avglat_data = (info, float(op[5].split(",")[2].split("=")[1]))
+						_99lat_data = (info, float(op[12].split("=")[-1].split("[")[1][:-1]))
+						iops.append(iops_data)
+						bandwidth.append(bandwidth_data)
+						avglat.append(avglat_data)
+						_99lat.append(_99lat_data)
+						
+						cmd = DOCKER_EXEC+id+" cat "+NVME_OUT
+						res = subprocess.check_output(cmd, shell=True)
+						lines = res.split("\n")
+						
+						info = "Temp="+lines[2].split(":")[1]+\
+								" Avail Spare="+lines[3].split(":")[1]+\
+								" Used:"+lines[5].split(":")[1]+\
+								" id:"+id
+						dread_data = (info,int(lines[6].split(":")[1]))
+						dwrite_data = (info,int(lines[7].split(":")[1]))
+						dread.append(dread_data)
+						dwrite.append(dwrite_data)
+
+				
+					# Now print the graph
+					print "\nFIO:\n----"
+					for line in graph.graph('IOPS',iops):
+						print line
+					print"\n"
+					for line in graph.graph("Bandwidth (MB/s)",bandwidth):
+						print line
+					print "\n"
+					for line in graph.graph('Average Latency (usec)',avglat):
+						print line
+					print "\n"
+					for line in graph.graph('99.99% Latency (usec)',_99lat):
+						print line
+					print "\nNVMe-Cli:\n----------"
+					for line in graph.graph('Data Units Read',dread):
+						print line
+					print "\n"
+					for line in graph.graph('Data Units Written',dwrite):
+						print line
+
+						
 				inp = raw_input("\nPress \"Y\" to read more or any key to quit:")
 				if inp.lower() == "y".lower():
 					self.summarize(tool, containerIDs)
