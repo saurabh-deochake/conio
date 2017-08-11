@@ -268,13 +268,14 @@ def create(num):
 
 @click.option('--offset',
 				help='offset in the file to start I/O. Data before the offset will not be touched. Mention size and offset to avoid containers reading over each other')
-
+@click.option('--graph', is_flag=True,
+				help='display results in graphical form')
 ## ------------------------------------------------------------------------
 
 # command function, handles all parameters
 def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				time_based,cpus_allowed_policy,iodepth,rw,blocksize,runtime,
-				numjobs,name,jobfile,config,mixed_jobs,offset):
+				numjobs,name,jobfile,config,mixed_jobs,offset,graph):
 	"""run tools inside containers"""
 	try:
 		global flag
@@ -299,6 +300,8 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						res = d.verifyEnvironment()
 						c = Container()
 						rt = Runtime()
+
+						graph=1 if graph else 0
 						# if not then set up all containers that are required ("num")
 						if not res:
 							_, location = c.setupBenchmarkContainer(num)
@@ -321,7 +324,8 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 								tools = 2
 								fioParams = None
 								nvmeParams = "smart-log "+CONT_MOUNT
-								rt.runTool(tool, ids,fioParams,nvmeParams)
+								###-------------- graph plot ------------ ###
+								rt.runTool(tool, ids,fioParams,nvmeParams,graph)
 						else:
 							tools = 1 if flag else 3
 							#tools = 3
@@ -332,7 +336,8 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 								for (each_key, each_val) in parser.items(each_section):
 									param += " --"+each_key+"="+each_val
 								fioParams.append(param)
-							rt.runTool(tools, ids, None, None,fioParams, nvmeParams)				
+
+							rt.runTool(tools, ids, None, None,fioParams, nvmeParams,graph)				
 							#### CHANGE runTool ACCORDING TO PRESENCE OF OFFSET ####	
 						
 	
@@ -348,6 +353,8 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 			#global flag
 			rt = Runtime()
 			c = Container()
+
+			graph=1 if graph else 0
 			# if not then set up all containers that are required ("num")
 			if not res:
 				_,location=c.setupBenchmarkContainer(num)
@@ -382,9 +389,9 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					# run the tool inside containers
 				
 				if offset is not None and size is not None:	
-					rt.runTool(tools,ids,offset,size,fioParams,nvmeParams)
+					rt.runTool(tools,ids,offset,size,fioParams,nvmeParams,graph)
 				else: 
-					rt.runTool(tools,ids,None,None,fioParams,nvmeParams)
+					rt.runTool(tools,ids,None,None,fioParams,nvmeParams,graph)
 
 			# nvme-cli
 			elif tool.lower() == "nvme".lower():
@@ -395,7 +402,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					tools = 2
 					fioParams = None
 					nvmeParams = "smart-log "+CONT_MOUNT
-					rt.runTool(tools, ids,fioParams,nvmeParams)
+					rt.runTool(tools, ids,fioParams,nvmeParams,graph)
 			# fio and nvme-cli
 			else:
 				tool = "all"
@@ -417,9 +424,9 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						" --runtime="+runtime+" --numjobs="+numjobs
 				nvmeParams = "smart-log "+CONT_MOUNT
 				if offset is not None and size is not None:
-					rt.runTool(tools, ids,offset,size, fioParams, nvmeParams)
+					rt.runTool(tools, ids,offset,size, fioParams, nvmeParams,graph)
 				else:
-					rt.runTool(tools,ids,None,None,fioParams,nvmeParams)
+					rt.runTool(tools,ids,None,None,fioParams,nvmeParams,graph)
 		# stop and remove containers
 		print "\n"
 		c.cleanup(ids)

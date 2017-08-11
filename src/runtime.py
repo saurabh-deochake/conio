@@ -19,6 +19,7 @@ Author: Saurabh Deochake, Intel Corporation
 import os
 import subprocess
 import click
+import re
 
 from ascii_graph import Pyasciigraph
 from config import *
@@ -30,7 +31,8 @@ class Runtime:
 
 
 		# run Fio based on parameters and number of containers
-		def runTool(self,tool, containerIDs,offset, size, fioParams, nvmeParams):
+		def runTool(self,tool, containerIDs,offset, size, fioParams, nvmeParams,\
+						graph):
 			try:
 				
 				if type(fioParams) is list:
@@ -111,8 +113,11 @@ class Runtime:
 								cmd += DOCKER_EXEC+id+fio+" & "+nvme
 						#print cmd
 						res = subprocess.check_output(cmd, shell=True)
-								
-				self.summarize(tool, containerIDs)
+				
+				if graph:
+					self.summarizeGraph(tool, containerIDs)
+				else:
+					self.summarize(tool, containerIDs)
 
 			except Exception, e:
 					print "\n[ERROR] Something went wrong. Try again!"
@@ -190,17 +195,62 @@ class Runtime:
 
 ## -------------------------------------------------------------------------
 
-	# Summarize in graphical form
-	def summarizeGraph(self, tool, containerIDs):
-		try:
-			pass
+		# Summarize in graphical form
+		def summarizeGraph(self, tool, containerIDs):
+			try:
+				
+				iops = []
+				bandwidth = []
+				avglat = []
+				_99lat = []
+				graph = Pyasciigraph(line_length=80,min_graph_length=30,float_format='{0:,.2f}')
+				non_decimal = re.compile(r'[^\d.]+')
+				if tool == 1:
+					for id in containerIDs:
+						#print "\nSummary for container:%s"%id
+						cmd = DOCKER_EXEC+id+" cat "+FIO_OUT
+						res = subprocess.check_output(cmd, shell=True)
+						lines = res.split("\n")
+						op = res.split("Starting")[1].split("\n")
 
+						info = lines[0].split(",")[0].split(":")[2].split("=")[1]+\
+								" bs="+\
+								lines[0].split(",")[1].split("=")[1].split("-")[0]+\
+								" Qd="+lines[0].split(",")[3].split("=")[1]+\
+								" jobs="+op[2].split(" ")[2].split("=")[1].split(")")[0]+\
+								" id="+id
+						iops_data = (info,int(op[3].split(",")[2].split("=")[1]))
+						 
+						bandwidth_data = (info, float(non_decimal.sub('',op[3].split(",")[1].split("=")[1]))/1000)
+						avglat_data = (info, float(op[5].split(",")[2].split("=")[1]))
+						_99lat_data = (info, float(op[12].split("=")[-1].split("[")[1][:-1]))
+						iops.append(iops_data)
+						bandwidth.append(bandwidth_data)
+						avglat.append(avglat_data)
+						_99lat.append(_99lat_data)
 
+				
 
-		except Exception, e:
-			print "\n[ERROR] Something went wrong. Try again!"
-			print str(e)
-			exit(1)
+				for line in graph.graph('IOPS',iops):
+					print line
+				print "\n"
+				for line in graph.graph("Bandwidth (MB/s)",bandwidth):
+					print line
+				print "\n"
+				for line in graph.graph('Average Latency (usec)',avglat):
+					print line
+				print "\n"
+				for line in graph.graph('99.99% Latency (usec)',_99lat):
+					print line
+				inp = raw_input("\nPress \"Y\" to read more:")
+				if inp.lower() == "y".lower():
+					self.summarize(tool, containerIDs)
+				else:
+					return
+			except Exception, e:
+				print "\n[ERROR] Something went wrong. Try again!"
+				print str(e)
+				exit(1)
 
 
 ## -------------------------------------------------------------------------
