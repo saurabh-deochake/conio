@@ -203,9 +203,11 @@ class Runtime:
 				bandwidth = []
 				avglat = []
 				_99lat = []
+				dread = []
+				dwrite = []
 				graph = Pyasciigraph(line_length=80,min_graph_length=30,float_format='{0:,.2f}')
 				non_decimal = re.compile(r'[^\d.]+')
-				print "\nSummary of containers:"
+				print "\t\t\t---Summary of benchmark results---"
 				if tool == 1:
 					for id in containerIDs:
 						#print "\nSummary for container:%s"%id
@@ -231,18 +233,42 @@ class Runtime:
 						_99lat.append(_99lat_data)
 
 				
+					print "\nFIO:\n----"
+					for line in graph.graph('IOPS',iops):
+						print line
+					print"\n"	
+					for line in graph.graph("Bandwidth (MB/s)",bandwidth):
+						print line
+					print "\n"
+					for line in graph.graph('Average Latency (usec)',avglat):
+						print line
+					print "\n"
+					for line in graph.graph('99.99% Latency (usec)',_99lat):
+						print line
+				
+				if tool == 2:
+					for id in containerIDs:
+						cmd = DOCKER_EXEC+id+" cat "+NVME_OUT
+						res = subprocess.check_output(cmd, shell=True)
+						lines = res.split("\n")
+				
+						info = "Temp="+lines[2].split(":")[1]+\
+							   " Avail Spare="+lines[3].split(":")[1]+\
+							   " Used:"+lines[5].split(":")[1]+"%"+\
+							   " id:"+id
+						dread_data = (info,int(lines[6].split(":")[1]))
+						dwrite_data = (info,int(lines[7].split(":")[1]))
 
-				for line in graph.graph('IOPS',iops):
-					print line
-				print "\n"
-				for line in graph.graph("Bandwidth (MB/s)",bandwidth):
-					print line
-				print "\n"
-				for line in graph.graph('Average Latency (usec)',avglat):
-					print line
-				print "\n"
-				for line in graph.graph('99.99% Latency (usec)',_99lat):
-					print line
+						dread.append(dread_data)
+						dwrite.append(dwrite_data)
+
+					print "\nNVMe-Cli:\n----------"
+					for line in graph.graph('Data Units Read',dread):
+						print line
+					for line in graph.graph('Data Units Written',dwrite):
+						print line
+
+
 				inp = raw_input("\nPress \"Y\" to read more or any key to quit:")
 				if inp.lower() == "y".lower():
 					self.summarize(tool, containerIDs)

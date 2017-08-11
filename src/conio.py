@@ -402,7 +402,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					tools = 2
 					fioParams = None
 					nvmeParams = "smart-log "+CONT_MOUNT
-					rt.runTool(tools, ids,fioParams,nvmeParams,graph)
+					rt.runTool(tools, ids,None,None,fioParams,nvmeParams,graph)
 			# fio and nvme-cli
 			else:
 				tool = "all"
