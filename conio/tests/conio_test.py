@@ -28,8 +28,8 @@ from config import *
 
 def test_docker():
 	try:
-		verify = Verify()
-		res =verify.verifyEnvironment()
+		#verify = Verify()
+		#res =verify.verifyEnvironment()
 		
 		print "\nVerifying Docker enviroment..."
 		res = subprocess.check_output(RPM_GREP+" docker", shell=True)
