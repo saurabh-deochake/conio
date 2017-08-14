@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-        - python -m conio/tests/conio_test.py
+        - python conio/tests/conio_test.py
