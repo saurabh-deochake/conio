@@ -17,10 +17,13 @@ Author: Saurabh Deochake, Intel Corporation
 
 ### Build testing script
 
+import sys
+sys.path.insert(0,'..')
 
 from __future__ import absolute_import
 from src import verify 
- 
+
+
 #import src.runtime as runtime
 
 def test_docker():
