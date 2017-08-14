@@ -19,8 +19,8 @@ Author: Saurabh Deochake, Intel Corporation
 
 
 from __future__ import absolute_import
-from src.verify import Verify
-from src.runtime import Runtime
+from ..src.verify import Verify
+from ..src.runtime import Runtime
 
 def test_docker():
 	try:
