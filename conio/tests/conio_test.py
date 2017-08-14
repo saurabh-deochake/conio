@@ -21,7 +21,7 @@ Author: Saurabh Deochake, Intel Corporation
 import sys
 #sys.path.append('/conio/src/')
 
-from .. import verify
+from ..src import verify
 
 
 #import src.runtime as runtime
