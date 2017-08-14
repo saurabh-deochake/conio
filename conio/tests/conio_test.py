@@ -17,7 +17,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 ### Build testing script
 
-from __future__ import absolute_import
+#from __future__ import absolute_import
 import sys
 #sys.path.append('/conio/src/')
 
