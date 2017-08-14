@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
-	
+
 Author: Saurabh Deochake, Intel Corporation
 """
 
@@ -18,7 +18,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 ## ----------------IMPORTANT NOTE------------------------##
 ## Please leave a space after you define your variable.  ##
-## Failure to do so may cause fatal misbehavior.         ## 
+## Failure to do so may cause fatal misbehavior.         ##
 ##                Proceed with caution!                  ##
 
 # Docker commands
@@ -53,4 +53,3 @@ CONT_MOUNT = "/dev/xvda" ## CAUTION: Setting it to /dev/nvme0n1 doesn't work
 
 # Docker Image
 DOCKER_IMAGE_NAME = "saurabhd04/docker_fio"
-
