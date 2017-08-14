@@ -17,13 +17,12 @@ Author: Saurabh Deochake, Intel Corporation
 
 ### Build testing script
 
-#from __future__ import absolute_import
 import sys
+import subprocess
 sys.path.append('/home/travis/build/saurabh-deochake/conio/conio/src')
-print sys.path
 
 from verify import Verify
-
+from config import *
 
 #import src.runtime as runtime
 
@@ -31,15 +30,29 @@ def test_docker():
 	try:
 		verify = Verify()
 		res =verify.verifyEnvironment()
+		
+		print "\nVerifying Docker enviroment..."
+		res = subprocess.check_output(RPM_GREP+" docker", shell=True)
+		if res == "":
+			print "\t-[ERROR] Is Docker installed? Please install Docker..."
+		print "\t...Verifying Docker daemon"
+		res = subprocess.check_output(PS_GREP+" dockerd", shell=True)
+		if "/usr/bin/dockerd" in res:
+			print "\t-[INFO] Docker daemon is running"
+		else:
+			print "\t-[ERROR] Docker daemon is not running"
 
-		if not res:
-			print "\n Docker is set up and daemon is running"
+		print "\t...Verifying if benchmark container is set up"
+		res = subprocess.check_output(DOCKER_PS_GREP+DOCKER_IMAGE_NAME+"| wc -l",\
+										shell=True)
+
+		exit(0)
 
 
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Stack trace:"
 		print str(e)
-
+		exit(1)
 
 def test_runContainer():
 	try:
