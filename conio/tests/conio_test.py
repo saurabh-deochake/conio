@@ -21,15 +21,15 @@ from __future__ import absolute_import
 import sys
 #sys.path.append('/conio/src/')
 
-import conio.src.verify
+from .. import verify
 
 
 #import src.runtime as runtime
 
 def test_docker():
 	try:
-		verify = Verify()
-		res =verifyEnvironment()
+		verify = verify.Verify()
+		res =verify.verifyEnvironment()
 
 		if not res:
 			print "\n Docker is set up and daemon is running"
