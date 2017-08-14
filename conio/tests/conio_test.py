@@ -19,16 +19,16 @@ Author: Saurabh Deochake, Intel Corporation
 
 #from __future__ import absolute_import
 import sys
-#sys.path.append('/conio/src/')
+sys.path.append('../src')
 
-from ..src import verify
+from verify import Verify
 
 
 #import src.runtime as runtime
 
 def test_docker():
 	try:
-		verify = verify.Verify()
+		verify = Verify()
 		res =verify.verifyEnvironment()
 
 		if not res:
