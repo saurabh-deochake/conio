@@ -21,7 +21,7 @@ from __future__ import absolute_import
 import sys
 sys.path.insert(0,'..')
 
-from src import verify 
+import src.verify
 
 
 #import src.runtime as runtime
