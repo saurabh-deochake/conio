@@ -19,7 +19,8 @@ Author: Saurabh Deochake, Intel Corporation
 
 #from __future__ import absolute_import
 import sys
-sys.path.append('../src')
+#sys.path.append('../src')
+print sys.path
 
 from verify import Verify
 
