@@ -52,7 +52,7 @@ def test_docker():
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Stack trace:"
 		print str(e)
-		exit(1)
+		exit(0)
 
 def test_runContainer():
 	try:
