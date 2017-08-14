@@ -18,8 +18,8 @@ Author: Saurabh Deochake, Intel Corporation
 ### Build testing script
 
 from __future__ import absolute_import
-import ..src.verify 
-import ..src.runtime
+import src.verify 
+import src.runtime
 
 def test_docker():
 	try:
