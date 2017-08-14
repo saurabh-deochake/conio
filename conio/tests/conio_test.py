@@ -19,17 +19,17 @@ Author: Saurabh Deochake, Intel Corporation
 
 from __future__ import absolute_import
 import sys
-sys.path.insert(0,'..')
+sys.path.append('/conio/src/')
 
-import src.verify
+from src.verify import Verify
 
 
 #import src.runtime as runtime
 
 def test_docker():
 	try:
-		verify = verify.Verify()
-		res = verify.verifyEnvironment()
+		verify = Verify()
+		res =verifyEnvironment()
 
 		if not res:
 			print "\n Docker is set up and daemon is running"
