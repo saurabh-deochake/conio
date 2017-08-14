@@ -1,4 +1,4 @@
 
 		[console_scripts]
-		conio=src.conio:conio
+		conio=conio.src.conio:conio
 	
