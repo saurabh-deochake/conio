@@ -19,9 +19,13 @@ Author: Saurabh Deochake, Intel Corporation
 
 import sys
 import subprocess
+
+# This addition to PYTHONPATH is very specific to travis build. 
+# Please change the path to appropriate /path/to/your/subpackage
+# for proper resolution and import of packages
+
 sys.path.append('/home/travis/build/saurabh-deochake/conio/conio/src')
 
-from verify import Verify
 from config import *
 
 #import src.runtime as runtime
