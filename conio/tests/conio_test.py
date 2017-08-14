@@ -29,11 +29,10 @@ sys.path.append('/home/travis/build/saurabh-deochake/conio/conio/src')
 from config import RPM_GREP, PS_GREP, DOCKER_PS_GREP, DOCKER_IMAGE_NAME
 
 def test_docker():
-    """ 
-	Test to check if docker and docker daemon is running
-	"""
-	try:
-        
+    """
+    Test to check if docker and docker daemon is running
+    """
+    try:
         print "\nVerifying Docker enviroment..."
         res = subprocess.check_output(RPM_GREP+" docker", shell=True)
         if res == "":
@@ -52,22 +51,21 @@ def test_docker():
         exit(0)
 
 
-    except Exception, e:
+    except Exception, exception:
         print "\n[ERROR] Something went wrong. Stack trace:"
-        print str(e)
+        print str(exception)
         exit(0)
 
 def test_run_container():
     """
-	Skeleton code to test if container is running
-	"""
-	try:
-        
+    Skeleton code to test if container is running
+    """
+    try:
         pass
 
-    except Exception, e:
+    except Exception, exception:
         print "\n[ERROR] Something went wrong. Stack trace:"
-        print str(e)
+        print str(exception)
 
 test_docker()
-test_runContainer()
+test_run_container()
