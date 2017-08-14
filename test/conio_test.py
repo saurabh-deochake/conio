@@ -45,9 +45,6 @@ def test_runContainer():
 		print "\n[ERROR] Something went wrong. Stack trace:"
 		print str(e)
 
-def main():
-	test_docker()
-	test_runContainer()
+test_docker()
+test_runContainer()
 
-if __name__ == '__main':
-	main()
