@@ -19,9 +19,9 @@ Author: Saurabh Deochake, Intel Corporation
 
 from __future__ import absolute_import
 import sys
-sys.path.append('/conio/src/')
+#sys.path.append('/conio/src/')
 
-from ..src.verify import Verify
+import conio.src.verify
 
 
 #import src.runtime as runtime
