@@ -17,10 +17,10 @@ Author: Saurabh Deochake, Intel Corporation
 
 ### Build testing script
 
+from __future__ import absolute_import
 import sys
 sys.path.insert(0,'..')
 
-from __future__ import absolute_import
 from src import verify 
 
 
