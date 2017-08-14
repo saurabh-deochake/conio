@@ -19,7 +19,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 #from __future__ import absolute_import
 import sys
-sys.path.append('/home/travis/build/saurabh-deochake/conio/conio/tests')
+sys.path.append('/home/travis/build/saurabh-deochake/conio/conio/src')
 print sys.path
 
 from verify import Verify
