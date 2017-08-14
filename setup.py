@@ -36,7 +36,7 @@ setup(
 	install_requires=['Click','configparser','ascii_graph'],
 	entry_points='''
 		[console_scripts]
-		conio=src.conio:conio
+		conio=conio.src.conio:conio
 	'''
 
 )
