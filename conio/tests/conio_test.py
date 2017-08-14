@@ -21,7 +21,7 @@ from __future__ import absolute_import
 import sys
 sys.path.append('/conio/src/')
 
-from src.verify import Verify
+from ..src.verify import Verify
 
 
 #import src.runtime as runtime
