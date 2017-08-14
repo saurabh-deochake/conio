@@ -19,7 +19,7 @@ Author: Saurabh Deochake, Intel Corporation
 
 
 from __future__ import absolute_import
-from ..src.verify import * 
+from src import verify 
  
 #import src.runtime as runtime
 
