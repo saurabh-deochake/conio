@@ -57,13 +57,13 @@ def list(running, stopped):
 		c = Container()
 		if running:
 			running_tag = 1 # list all running containers, 0 otherwise
-			data = c.listContainers(running_tag)
+			data = c.list_containers(running_tag)
 		if stopped:
 			running_tag = 0
-			data = c.listContainers(running_tag)
+			data = c.list_containers(running_tag)
 		else:
 			running_tag = 1
-			data = c.listContainers(running_tag)
+			data = c.list_containers(running_tag)
 		print "\nCONTAINER ID\tNAMES"
 		print "--------------------------------------"
 		for key in data:
@@ -91,12 +91,12 @@ def stop(name, id, all):
 			exit(1)
 		c = Container()
 		if all:
-			ids = c.getContainerID(10)
-			c.stopContainers(ids)
+			ids = c.get_container_id(10)
+			c.stop_containers(ids)
 		if name:
-			c.stopContainers(name)
+			c.stop_containers(name)
 		if id:
-			c.stopContainers(id)
+			c.stop_containers(id)
 
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
@@ -123,12 +123,12 @@ def start(name, id, all):
 		if all:
 			running = 0
 			c = Container()
-			ids = c.listContainers(running).keys()
-			c.startContainers(ids)
+			ids = c.list_containers(running).keys()
+			c.start_containers(ids)
 		if name:
-			c.startContainers(name)
+			c.start_containers(name)
 		if id:
-			c.startContainers(id)
+			c.start_containers(id)
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)
@@ -154,7 +154,7 @@ def clean(name, id, num, all):
 		
 		if all:
 			c = Container()
-			ids = c.getContainerID(10)
+			ids = c.get_container_id(10)
 			c.cleanup(ids)
 		elif num:
 			if num == '0':
@@ -162,17 +162,17 @@ def clean(name, id, num, all):
 				exit(0)
 			else:		   
 				c = Container()
-				ids = c.getContainerID(10)
+				ids = c.get_container_id(10)
 				ids = ids[:int(num)]
 				#print "\n[INFO] Removing first %s container(s)"%num
 				c.cleanup(ids)
 					
 		if name:
 			c = Container()
-			c.cleanupSpecific(name)
+			c.cleanup_specific(name)
 		if id:
 			c = Container()
-			c.cleanupSpecific(id)
+			c.cleanup_specific(id)
 		else:
 				num = raw_input("How many containers do you want to remove:")
 				if num == '0':
@@ -180,7 +180,7 @@ def clean(name, id, num, all):
 					pass
 				else:
 					c = Container()
-					ids = c.getContainerID(10)
+					ids = c.get_container_id(10)
 					ids = ids[:int(num)]
 					#print "\n[INFO] Removing first %s container(s)"%num
 					c.cleanup(ids)
@@ -212,8 +212,8 @@ def create(num):
 		c = Container()
 		#if not then set up all containers that are required ("num")
 		#if not res:
-		_, location = c.setupBenchmarkContainer(num)
-		ids = c.getContainerID(num)
+		_, location = c.setup_benchmark_container(num)
+		ids = c.get_container_id(num)
 		if "nvme" not in location: flag=1
 		
 
@@ -304,15 +304,15 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						graph=1 if graph else 0
 						# if not then set up all containers that are required ("num")
 						if not res:
-							_, location = c.setupBenchmarkContainer(num)
-							ids = c.getContainerID(num)
+							_, location = c.setup_benchmark_container(num)
+							ids = c.get_container_id(num)
 							if "nvme" not in location: flag=1
 						elif num>res:
-							_, location = c.setupBenchmarkContainer(num-res)
-							ids = c.getContainerID(num)
+							_, location = c.setup_benchmark_container(num-res)
+							ids = c.get_container_id(num)
 							if "nvme" not in location: flag=1
 						else:
-							ids = c.getContainerID(num)
+							ids = c.get_container_id(num)
 							print "\t-Already have enough containers running, fetching first %s containers"%num
 						ids = ids[:num]
 
@@ -357,15 +357,15 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 			graph=1 if graph else 0
 			# if not then set up all containers that are required ("num")
 			if not res:
-				_,location=c.setupBenchmarkContainer(num)
-				ids = c.getContainerID(num)
+				_,location=c.setup_benchmark_container(num)
+				ids = c.get_container_id(num)
 				if ("nvme" not in location) and (tool=="nvme" or tool=="all"): flag=1
 			elif num>res:
-				_,location=c.setupBenchmarkContainer(num-res)
-				ids = c.getContainerID(num)
+				_,location=c.setup_benchmark_container(num-res)
+				ids = c.get_container_id(num)
 				if ("nvme" not in location) and (tool=="nvme" or tool=="all") : flag=1
 			else:
-				ids = c.getContainerID(num)
+				ids = c.get_container_id(num)
 				print "\t-Already have enough containers running, fetching first %s containers"%num
 			ids = ids[:num]
 			#print ids
@@ -376,7 +376,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				if jobfile:
 					if os.path.exists(jobfile):
 						path = os.path.abspath(jobfile)
-						c.copyToDocker(ids,path)
+						c.copy_to_docker(ids,path)
 						fioParams= "/"+os.path.basename(jobfile)
 				else:
 
@@ -412,7 +412,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 				if jobfile:
 					if os.path.exists(jobfile):
 						path = os.path.abspath(jobfile)
-						c.copyToDocker(ids, path)
+						c.copy_to_docker(ids, path)
 						fioParams = "/"+os.path.basename(jobfile)
 				else:
 					# gather all parameters, if not mentioned then take default
