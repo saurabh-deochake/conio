@@ -1,4 +1,5 @@
 #!/bin/python
+# -*- coding: utf-8 -*-
 
 
 """
@@ -96,7 +97,7 @@ class Container(object):
                     else:
                         continue
 
-        except Exception, exception:
+        except subprocess.CalledProcessError, exception:
             print "\n[ERROR] Something went wrong. Try again!"
             print str(exception)
             exit(1)
@@ -118,12 +119,12 @@ class Container(object):
                     #remove containers by docker stop and docker rm
                     print "\t-[INFO] Removing container:%s"%id_value
                     cmd = DOCKER_STOP+id_value+" && "+DOCKER_RM+id_value
-                    res = subprocess.check_output(cmd, shell=True)
+                    subprocess.check_output(cmd, shell=True)
                 exit(0)
             else:
                 exit(0)
 
-        except Exception, exception:
+        except subprocess.CalledProcessError, exception:
             print "\n[ERROR] Something went wrong. Try again!"
             print str(exception)
             exit(1)
@@ -148,7 +149,7 @@ class Container(object):
                 if inp_value.lower() == 'y'.lower():
                     cmd = DOCKER_STOP+attr+" && "+DOCKER_RM+attr
                     print "\t- [INFO] Removing contaier:%s"%attr
-                    res = subprocess.check_output(cmd, shell=True)
+                    subprocess.check_output(cmd, shell=True)
                     exit(0)
                 else:
                     exit(0)
@@ -172,7 +173,7 @@ class Container(object):
             for id_value in container_ids:
                 #print "Copying jobfile to containers..."
                 cmd = DOCKER_CP+jobfile+" "+id_value+":/"
-                res = subprocess.check_output(cmd, shell=True)
+                subprocess.check_output(cmd, shell=True)
         except subprocess.CalledProcessError, exception:
             print "\n[ERROR] Something went wrong. Try again!"
             print str(exception)
@@ -260,21 +261,20 @@ class Container(object):
                     for id_value in attr:
                         # stop all containers
                         print "\t-[INFO] Stopping container:%s"%id_value
-                        res = subprocess.check_output(DOCKER_STOP+id_value, shell=True)
+                        subprocess.check_output(DOCKER_STOP+id_value, shell=True)
                     exit(0)
                 else:
                     exit(0)
             else:
                 cmd = DOCKER_PS_ALL+GREP_EXACT+attr
-             
                 if not subprocess.check_output(cmd, shell=True):
                     print "\nNo such container: %s"%attr
                     exit(1)
                 else:
                     print "\t-[INFO] Stopping container:%s"%attr
-                    res = subprocess.check_output(DOCKER_STOP+attr, shell=True)
+                    subprocess.check_output(DOCKER_STOP+attr, shell=True)
 
-        except Exception:
+        except subprocess.CalledProcessError:
             print "\n[ERROR] No such container found"
             exit(1)
 
@@ -303,7 +303,7 @@ class Container(object):
                     exit(1)
                 else:
                     print "\t-[INFO] Staring container:%s"%attr
-                    res = subprocess.check_output(DOCKER_START+attr, shell=True)
+                    subprocess.check_output(DOCKER_START+attr, shell=True)
         except subprocess.CalledProcessError:
             print "\n[ERROR] No such container found"
             exit(1)
