@@ -3,7 +3,7 @@
 # conio ![](https://travis-ci.com/saurabh-deochake/conio.svg?token=RxYsxYxhaD6syK9zknyr&branch=master) ![](https://img.shields.io/hexpm/l/plug.svg) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)   
 
 <p align="center">
-<img src="https://cloud.githubusercontent.com/assets/1744971/20331694/e07e9148-ab5b-11e6-856a-e4e956540077.png" width="70%">
+<img src="https://github.com/saurabh-deochake/conio/blob/master/assets/conio_small.PNG" width="70%">
 </p>
 
 A command line tool for automatic containerized I/O benchmarking of cloud storage.     
