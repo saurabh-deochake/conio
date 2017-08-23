@@ -118,7 +118,7 @@ class Container(object):
                 for id_value in container_ids:
                     #remove containers by docker stop and docker rm
                     print "\t-[INFO] Removing container:%s"%id_value
-                    cmd = DOCKER_STOP+id_value+" && "+DOCKER_RM+id_value
+                    cmd = DOCKER_STOP+id_value+" && "+DOCKER_RM+" -v "+id_value
                     subprocess.check_output(cmd, shell=True)
                 exit(0)
             else:
@@ -147,7 +147,7 @@ class Container(object):
             else:
                 inp_value = raw_input("Remove container? [y|N]:")
                 if inp_value.lower() == 'y'.lower():
-                    cmd = DOCKER_STOP+attr+" && "+DOCKER_RM+attr
+                    cmd = DOCKER_STOP+attr+" && "+DOCKER_RM+" -v "+attr
                     print "\t- [INFO] Removing contaier:%s"%attr
                     subprocess.check_output(cmd, shell=True)
                     exit(0)
