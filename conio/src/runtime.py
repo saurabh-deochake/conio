@@ -58,8 +58,8 @@ class Runtime:
 						cmd = ""
 						
 						if offset is not None and size is not None and '%' not in size:
-							offset = int(offset) 
-							
+							#offset = int(offset) 
+							offset = self.convertToBytes(offset)
 							if offset%512:
 								offset -= (offset%512)
 								print "[WARNING] Rounding the offset down to nearest 512"
@@ -355,26 +355,29 @@ class Runtime:
 					return sizeInNumber << 10
 				# sizeInNumber * math.pow(10,3)
 				# MB or MiB or mb
-				if size.find("m".lower()) != -1:
+				elif size.find("m".lower()) != -1:
 					index = size.find("m".lower())
 					sizeInNumber = int(size[:index])
 					return sizeInNumber * math.pow(10,6)
 				# GB or GiB or gb
-				if size.find("g".lower()) != -1:
+				elif size.find("g".lower()) != -1:
 					index = size.find("g".lower())
 					sizeInNumber = int(size[:index])
 					return sizeInNumber << 30 
 					#sizeInNumber * math.pow(10, 9)
 				# TB or TiB or tb
-			   	if size.find("t".lower()) != -1:
+			   	elif size.find("t".lower()) != -1:
 					index = size.find("t".lower())
 					sizeInNumber = int(size[:index])
 					return sizeInNumber << 40 
 					#* math.pow(10, 12)
 			  	# B or b
-			  	if size.find("b".lower()) != -1:
+			  	elif size.find("b".lower()) != -1:
 					index = size.find("b".lower())
 					return int(size[:index])
+				else: 
+					return int(size)
+					
 			except Exception, e:
 				print "\n[ERROR] Failed to get size in bytes"
 				print str(e)
