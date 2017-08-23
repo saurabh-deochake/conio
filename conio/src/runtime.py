@@ -37,7 +37,7 @@ class Runtime:
 
 
 		# run Fio based on parameters and number of containers
-		def run_tool(self,tool, containerIDs,offset, size, fioParams, nvmeParams,\
+		def run_tool(self, tool, containerIDs, offset, size, fioParams, nvmeParams,\
 						graph):
 			"""
 			Run tools inside the containers according to all the parameters
@@ -241,7 +241,7 @@ class Runtime:
 				_99lat = []
 				dread = []
 				dwrite = []
-				graph = Pyasciigraph(line_length=80,min_graph_length=30,float_format='{0:,.2f}')
+				graph = Pyasciigraph(line_length=80, min_graph_length=30, float_format='{0:,.2f}')
 				non_decimal = re.compile(r'[^\d.]+')
 				print "\n\t\t     ---Summary of benchmark results---"
 				if tool == 1:
@@ -270,16 +270,16 @@ class Runtime:
 
 				
 					print "\n\t\t\t\t--FIO--"
-					for line in graph.graph('IOPS',iops):
+					for line in graph.graph('IOPS', iops):
 						print line
 					print"\n"	
-					for line in graph.graph("Bandwidth (MB/s)",bandwidth):
+					for line in graph.graph("Bandwidth (MB/s)", bandwidth):
 						print line
 					print "\n"
-					for line in graph.graph('Average Latency (usec)',avglat):
+					for line in graph.graph('Average Latency (usec)', avglat):
 						print line
 					print "\n"
-					for line in graph.graph('99.99% Latency (usec)',_99lat):
+					for line in graph.graph('99.99% Latency (usec)', _99lat):
 						print line
 				
 				if tool == 2:
@@ -299,10 +299,10 @@ class Runtime:
 						dwrite.append(dwrite_data)
 
 					print "\n\t\t\t\t--NVMe-Cli--"
-					for line in graph.graph('Data Units Read',dread):
+					for line in graph.graph('Data Units Read', dread):
 						print line
 					print "\n"
-					for line in graph.graph('Data Units Written',dwrite):
+					for line in graph.graph('Data Units Written', dwrite):
 						print line
 
 			
@@ -338,30 +338,30 @@ class Runtime:
 								" Avail Spare="+lines[3].split(":")[1]+\
 								" Used:"+lines[5].split(":")[1]+\
 								" id:"+id
-						dread_data = (info,int(lines[6].split(":")[1]))
-						dwrite_data = (info,int(lines[7].split(":")[1]))
+						dread_data = (info, int(lines[6].split(":")[1]))
+						dwrite_data = (info, int(lines[7].split(":")[1]))
 						dread.append(dread_data)
 						dwrite.append(dwrite_data)
 
 				
 					# Now print the graph
 					print "\n\t\t\t\t--FIO--"
-					for line in graph.graph('IOPS',iops):
+					for line in graph.graph('IOPS', iops):
 						print line
 					print"\n"
-					for line in graph.graph("Bandwidth (MB/s)",bandwidth):
+					for line in graph.graph("Bandwidth (MB/s)", bandwidth):
 						print line
 					print "\n"
-					for line in graph.graph('Average Latency (usec)',avglat):
+					for line in graph.graph('Average Latency (usec)', avglat):
 						print line
 					print "\n"
-					for line in graph.graph('99.99% Latency (usec)',_99lat):
+					for line in graph.graph('99.99% Latency (usec)', _99lat):
 						print line
 					print "\n\t\t\t\t--NVMe-Cli--"
-					for line in graph.graph('Data Units Read',dread):
+					for line in graph.graph('Data Units Read', dread):
 						print line
 					print "\n"
-					for line in graph.graph('Data Units Written',dwrite):
+					for line in graph.graph('Data Units Written', dwrite):
 						print line
 
 						
