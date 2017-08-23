@@ -325,7 +325,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 								fioParams = None
 								nvmeParams = "smart-log "+CONT_MOUNT
 								###-------------- graph plot ------------ ###
-								rt.runTool(tool, ids,fioParams,nvmeParams,graph)
+								rt.run_tool(tool, ids,fioParams,nvmeParams,graph)
 						else:
 							tools = 1 if flag else 3
 							#tools = 3
@@ -337,9 +337,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 									param += " --"+each_key+"="+each_val
 								fioParams.append(param)
 
-							rt.runTool(tools, ids, None, None,fioParams, nvmeParams,graph)				
-							#### CHANGE runTool ACCORDING TO PRESENCE OF OFFSET ####	
-						
+							rt.run_tool(tools, ids, None, None,fioParams, nvmeParams,graph)
 	
 				else:
 					print "\n[Error] No such file or directory!"
@@ -389,9 +387,9 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					# run the tool inside containers
 				
 				if offset is not None and size is not None:	
-					rt.runTool(tools,ids,offset,size,fioParams,nvmeParams,graph)
+					rt.run_tool(tools,ids,offset,size,fioParams,nvmeParams,graph)
 				else: 
-					rt.runTool(tools,ids,None,None,fioParams,nvmeParams,graph)
+					rt.run_tool(tools,ids,None,None,fioParams,nvmeParams,graph)
 
 			# nvme-cli
 			elif tool.lower() == "nvme".lower():
@@ -402,7 +400,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 					tools = 2
 					fioParams = None
 					nvmeParams = "smart-log "+CONT_MOUNT
-					rt.runTool(tools, ids,None,None,fioParams,nvmeParams,graph)
+					rt.run_tool(tools, ids,None,None,fioParams,nvmeParams,graph)
 			# fio and nvme-cli
 			else:
 				tool = "all"
@@ -424,14 +422,10 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						" --runtime="+runtime+" --numjobs="+numjobs
 				nvmeParams = "smart-log "+CONT_MOUNT
 				if offset is not None and size is not None:
-					rt.runTool(tools, ids,offset,size, fioParams, nvmeParams,graph)
+					rt.run_tool(tools, ids,offset,size, fioParams, nvmeParams,graph)
 				else:
-					rt.runTool(tools,ids,None,None,fioParams,nvmeParams,graph)
-		# stop and remove containers
-		print "\n"
-		#c.cleanup(ids)
-		#clean(ids)
-	
+					rt.run_tool(tools,ids,None,None,fioParams,nvmeParams,graph)
+
 	except Exception, e:
 		print "\n[ERROR] Something went wrong. Try again!"
 		print str(e)

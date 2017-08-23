@@ -25,14 +25,32 @@ from ascii_graph import Pyasciigraph
 from config import *
 
 class Runtime:
+		"""
+		Run tools and display results 
+		"""
 		def __init__(self):
+			"""
+			Empty constructor. Can be used to initialize variables
+			"""
 			pass
 ## --------------------------------------------------------------------------
 
 
 		# run Fio based on parameters and number of containers
-		def runTool(self,tool, containerIDs,offset, size, fioParams, nvmeParams,\
+		def run_tool(self,tool, containerIDs,offset, size, fioParams, nvmeParams,\
 						graph):
+			"""
+			Run tools inside the containers according to all the parameters
+
+			:param tool: string, name of tool to run 
+			:param containerIDs: list of containers to run tools in
+			:param offset: string, offset to start IO from
+			:param size: string, size of disk to test
+			:param fioParams: string/list of FIO parameters
+			:param nvmeParams: string, nvme-cli parameters
+			:returns: exit gracefully when done
+			:raises Exception: if command fails to execute
+			"""
 			try:
 				
 				if type(fioParams) is list:
@@ -59,11 +77,11 @@ class Runtime:
 						
 						if offset is not None and size is not None and '%' not in size:
 							#offset = int(offset) 
-							offset = self.convertToBytes(offset)
+							offset = self.convert_to_bytes(offset)
 							if offset%512:
 								offset -= (offset%512)
 								print "[WARNING] Rounding the offset down to nearest 512"
-							size = self.convertToBytes(size)
+							size = self.convert_to_bytes(size)
 							print "Now running Fio inside containers..."
 							for id in containerIDs:
 								print "\t-Inside container:%s"%id
@@ -100,7 +118,7 @@ class Runtime:
 							if offset%512: 
 								offset -= offset%512
 								print "[WARNING] Rounding the offset down to nearest 512"
-							size = self.convertToBytes(size)
+							size = self.convert_to_bytes(size)
 							
 							print "Now running Fio and NVMe-CLI inside containers..."
 							for id in containerIDs:
@@ -117,7 +135,7 @@ class Runtime:
 						res = subprocess.check_output(cmd, shell=True)
 				
 				if graph:
-					self.summarizeGraph(tool, containerIDs)
+					self.summarize_graph(tool, containerIDs)
 				else:
 					self.summarize(tool, containerIDs)
 
@@ -130,6 +148,14 @@ class Runtime:
 
 	# print the summary of operation
 		def summarize(self, tool, containerIDs):
+			"""
+			Summarize the result in textual form
+
+			:param tool: string, tool which was run in contaier
+			:param containerIDs: list of containers id
+			:returns: exit gracefully when done
+			:raises Exception: if command fails to execute
+			"""
 			try:
 				if tool == 1:
 					for id in containerIDs:
@@ -198,7 +224,15 @@ class Runtime:
 ## -------------------------------------------------------------------------
 
 		# Summarize in graphical form
-		def summarizeGraph(self, tool, containerIDs):
+		def summarize_graph(self, tool, containerIDs):
+			"""
+			Summarize the result in graphical form
+			
+			:param tool: string, tool which was run in container
+			:param containerIDs: list of containers ids
+			:return: exit gracefully when done
+			:raises Exception: if command fails to execute
+			"""
 			try:
 				
 				iops = []
@@ -345,7 +379,14 @@ class Runtime:
 ## -------------------------------------------------------------------------
 		
 		# If offset is mentioned, convert KB/MB/GB to B
-		def convertToBytes(self, size):
+		def convert_to_bytes(self, size):
+			"""
+			convert size to number of bytes
+			
+			:param size: string, size to convert
+			:return size: integer in bytes
+			:raise Exception: if command fails to execute
+			"""
 			try:
 				size = size.lower()
 				# KB or KiB or kb
