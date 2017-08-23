@@ -297,7 +297,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 						#global flag
 						# check if Docker is set up properly
 						d = verify.Verify()
-						res = d.verifyEnvironment()
+						res = d.verify_environment()
 						c = Container()
 						rt = Runtime()
 
@@ -347,7 +347,7 @@ def run(tool,num,thread,direct,group_reporting,ioengine,size,do_verify,
 	
 			# check if Docker is set up properly
 			d = verify.Verify()
-			res = d.verifyEnvironment()
+			res = d.verify_environment()
 			#global flag
 			rt = Runtime()
 			c = Container()

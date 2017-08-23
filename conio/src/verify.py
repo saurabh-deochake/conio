@@ -27,30 +27,47 @@ import sys; sys.dont_write_bytecode = True
 from config import *
 
 class Verify:
+	"""
+	Verify in Docker is running and containers are set up
+	"""
 	def __init__(self):
+		"""
+		An empty constructor. Can be used to initialize variables
+		"""
 		# check environment variable
 		pass
 
 ## -------------------------------------------------------------------------
 	
 	# Verify environment needed to run the tool
-	def verifyEnvironment(self):
-		if self.verifyDocker():
-				if self.verifyDockerdRunning():
-						res = self.verifyFioContainer() 
+	def verify_environment(self):
+			"""
+			verify if Docker is running and a container is set up
+
+			:return 0: if successful
+			"""	
+			if self.verify_docker():
+				if self.verify_dockerd_running():
+						res = self.verify_fio_container() 
 						if not int(res):
 							print "\t-[OK] Docker is installed and running"
 							return 0
-							#self.setupBenchmarkContainer(num)
+
 						else:
 							print "\t-[INFO] Docker container for benchmarking already set up"
 							return int(res)
-							#exit(1)
+
 
 ## --------------------------------------------------------------------------
 
 	# Verify if docker is installed
-	def verifyDocker(self):
+	def verify_docker(self):
+		"""
+		verify if Docker is installed
+		
+		:return True: if successful, False otherwise
+		:raises Exception: if command fails to execute
+		"""
 		try:
 			print "\nVerifying Docker enviroment..."
 			res = subprocess.check_output(RPM_GREP+" docker", shell=True)
@@ -65,7 +82,13 @@ class Verify:
 
 ## -------------------------------------------------------------------------
 	# Verify if Docker daemon is running
-	def verifyDockerdRunning(self):
+	def verify_dockerd_running(self):
+		"""
+		verify if Docker daemon is running
+
+		:return True: if successful, exit with 1, otherwise
+		:raises Exception: if docker socket is not reachable
+		"""
 		try:
 			#print "\t...Verifying Docker daemon"
 			res = subprocess.check_output(PS_GREP+" dockerd", shell=True)
@@ -81,7 +104,13 @@ class Verify:
 ## -------------------------------------------------------------------------
 
 	# Verify if benchmark container is running
-	def verifyFioContainer(self):
+	def verify_fio_container(self):
+		"""
+		verify if at least one docker container is not running
+
+		:return res: string, output of command
+		:raises Execption: if a container is not running
+		"""
 		try:
 			#print "\t...Verifying if benchmark container is set up"
 			res = subprocess.check_output(DOCKER_PS_GREP+DOCKER_IMAGE_NAME+"| wc -l",\

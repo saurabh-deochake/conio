@@ -399,7 +399,7 @@ class Runtime:
 				elif size.find("m".lower()) != -1:
 					index = size.find("m".lower())
 					sizeInNumber = int(size[:index])
-					return sizeInNumber * math.pow(10,6)
+					return sizeInNumber << 20
 				# GB or GiB or gb
 				elif size.find("g".lower()) != -1:
 					index = size.find("g".lower())
