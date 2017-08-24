@@ -80,7 +80,11 @@ to make sure our set up runs smooth.
   * Install   
    ```
    $ python setup.py install
+   ```    
+   or go to the directory of the source code, on the same level as `setup.py` and run (make sure you have `pip` installed)       
    ```
+   $ pip install --editable .
+   ```     
    Now, if this gets stuck in fulfilling the requirements of packages, you may need to manually install `click` and `configparser` python packages using    
    ```
    $ pip install click
